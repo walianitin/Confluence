@@ -1,6 +1,6 @@
 "use client "
 import Spline from '@splinetool/react-spline/next';
-import Navbar from '../componets/navbar';
+import Navbar from '../components/navbar';
 export default function Sponsors() {
   return (
     <div className='min-w-screen min-h-screen gap-10 p-2 m-3'>

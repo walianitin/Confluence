@@ -1,6 +1,6 @@
 
-import AstroAndFont from "../componets/Astro";
-import Navbar from "../componets/navbar";
+import AstroAndFont from "../components/Astro";
+import Navbar from "../components/navbar";
 
 const backgroundStyle: React.CSSProperties = {
   backgroundImage: 'url("/bg.jpg")',
