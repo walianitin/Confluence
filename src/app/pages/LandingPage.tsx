@@ -1,7 +1,7 @@
-
 import AstroAndFont from "../components/Astro";
 import Navbar from "../components/navbar";
 
+import HomePageCard from "../components/HomepageCard";
 const backgroundStyle: React.CSSProperties = {
   backgroundImage: 'url("/bg.jpg")',
   backgroundSize: "cover",
@@ -9,18 +9,27 @@ const backgroundStyle: React.CSSProperties = {
   backgroundRepeat: "no-repeat",
   width: "100vw",
   minHeight: "100vh",
+  scale: "1",
   margin: 0,
-  opacity:10,
+  opacity: 0.8,
   padding: 0,
 };
 
 export default function LandingPage() {
   return (
-    <div style={backgroundStyle} className="min-h-screen w-screen flex justify-center items-start">
-      <div className="flex justify-center items-center flex-col p-3 gap-30 w-full">
-        <Navbar />
-        <AstroAndFont />
-      </div>
+    <div style={backgroundStyle} className="min-h-screen min-w-screen ">
+      <div className=" flex flex-col">
+        <div>
+          <Navbar />
+        </div>
+        <div>
+          <AstroAndFont />
+        </div>
+        <div className=" flex flex-row justify-between  mt-40 p-10 gap-20 ">
+            <HomePageCard />
+            <HomePageCard />
+        </div>
+      </div >
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Fonts from "./Fonts";
 
 export default function AstroAndFont() {
@@ -21,7 +21,8 @@ export default function AstroAndFont() {
                 <div className="relative translate-y-25 rotate-2  " style={{
                    
                 }}>
-                    <Image src="/astronaut.svg" alt="astronaut" width={200} height={200} />
+                    
+     {/* <Image src="/astronaut.svg" alt="astronaut" width={200} height={200} className="" /> */}
                 </div>
             </div>
                 <Fonts></Fonts>
