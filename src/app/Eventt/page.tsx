@@ -1,5 +1,5 @@
 import React from 'react'
-import EventSection from '@/app/Eventt/components/section'
+import EventSection from '../components/Eventsection'
 import Navbar from '@/app/components/navbar'
 export default function page() {
   return (
