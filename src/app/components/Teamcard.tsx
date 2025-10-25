@@ -7,7 +7,7 @@ const teamMembers = [
   {
     name: "William Foster",
     role: "Co-Founder & CEO",
-    img: "/team/william.jpg",
+    img: "/prakhar.jpg",
   },
   {
     name: "Emily Jonson",
