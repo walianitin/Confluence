@@ -24,3 +24,64 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Star background layers */
+.stars,
+.twinkling {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+}
+
+.stars {
+  background: url("/stars.png") repeat;
+  animation: moveStars 100s linear infinite;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.twinkling {
+  background: url("/twinkling.png") repeat;
+  animation: moveTwinkling 200s linear infinite;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+@keyframes moveStars {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+@keyframes moveTwinkling {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 10000px 5000px;
+  }
+}
+
+/* Floating astronaut animation */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-25px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
