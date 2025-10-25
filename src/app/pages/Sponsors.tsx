@@ -2,10 +2,10 @@ import Spline from '@splinetool/react-spline/next';
 
 export default function Sponsors() {
   return (
-    <main>
+    <div className=' bg-transparent rounded-full h-screen'>
       <Spline
         scene="loading..." 
       />
-    </main>
+    </div>
   );
 }
