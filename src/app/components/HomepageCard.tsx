@@ -1,12 +1,14 @@
+import {
+  cardGlassBackground,
+  cardOuterRadiusClass,
+  cardSurfaceClasses,
+} from "./cardTokens";
 
-
-export default function HomePageCard(){
+export default function HomePageCard() {
   return (
-    <div >
+    <div>
       <div
-        className="group w-[400px] rounded-2xl opacity-15 hover:opacity-100
-                   border border-white/20 p-6 shadow-lg transition-all duration-500 font-extralight 
-                   hover:shadow-[0_0_25px_5px_rgba(0,170,255,0.6)] hover:border-[#102c3db6]"
+        className={`group w-[400px] ${cardOuterRadiusClass} ${cardSurfaceClasses} ${cardGlassBackground} opacity-15 p-6 font-extralight transition-all duration-500 hover:border-[#102c3db6] hover:opacity-100 hover:shadow-[0_0_25px_5px_rgba(0,170,255,0.6)]`}
       >
         {/* Header Section */}
         <h2
@@ -26,5 +28,4 @@ export default function HomePageCard(){
       </div>
     </div>
   );
-};
-
+}

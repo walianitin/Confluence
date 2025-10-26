@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState, KeyboardEvent } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedDropdown from "../components/AnimatedDropdown";
 import {
@@ -92,76 +92,65 @@ const allEvents: Event[] = [
 ];
 
 function EventCard({ event }: { event: Event }) {
+  const [isHovered, setIsHovered] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpanded = () => setIsExpanded((prev) => !prev);
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      toggleExpanded();
-    }
+  const handleInteraction = () => {
+    // For touch devices, toggle the expanded state
+    setIsExpanded(!isExpanded);
   };
+
+  const showDetails = isHovered || isExpanded;
 
   const overlayRadius = CARD_OUTER_RADIUS_PX - CARD_PADDING_PX;
 
   return (
     <motion.div
-      className={`relative flex cursor-pointer flex-col overflow-hidden ${cardSurfaceClasses} ${cardGlassBackground}`}
+      className={`group relative cursor-pointer overflow-hidden ${cardSurfaceClasses} ${cardGlassBackground}`}
       style={{
         aspectRatio: "3 / 4",
         borderRadius: `${CARD_OUTER_RADIUS_PX}px`,
       }}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isExpanded}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.4 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={toggleExpanded}
-      onKeyDown={handleKeyDown}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      onClick={handleInteraction}
+      onTap={handleInteraction}
+      whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)" }}
     >
-      <motion.div
-        className="relative h-full w-full"
-        animate={{ scale: isExpanded ? 1.04 : 1 }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-      >
+      <div className="relative h-full w-full">
         <Image
           src={event.image}
           alt={event.eventName}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover"
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
-      </motion.div>
+      </div>
 
       <motion.div
-        className="absolute bottom-0 left-0 right-0 flex flex-col items-center justify-center border-t border-white/30 bg-black/20 px-5 text-center text-white backdrop-blur-lg"
+        className="absolute bottom-0 left-0 right-0 flex flex-col items-center justify-center border-t border-white/30 bg-black/10 px-5 text-center text-white backdrop-blur-lg"
         style={{
           borderBottomLeftRadius: `${overlayRadius}px`,
           borderBottomRightRadius: `${overlayRadius}px`,
         }}
         animate={{
-          height: isExpanded ? "100%" : "18%",
-          paddingTop: isExpanded ? "2rem" : "0.75rem",
-          paddingBottom: isExpanded ? "2rem" : "0.75rem",
-          backdropFilter: isExpanded ? "blur(24px)" : "blur(12px)",
-          backgroundColor: isExpanded
-            ? "rgba(8, 11, 26, 0.72)"
-            : "rgba(8, 11, 26, 0.35)",
+          height: showDetails ? "100%" : "15%",
         }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
+        {/* Title positioning changes based on hover */}
         <div
           className="flex w-full items-center justify-center"
           style={{
-            position: isExpanded ? "relative" : "absolute",
-            top: isExpanded ? "0" : "50%",
+            position: showDetails ? "relative" : "absolute",
+            top: showDetails ? "0" : "50%",
             left: 0,
             right: 0,
-            transform: isExpanded ? "none" : "translateY(-50%)",
+            transform: showDetails ? "none" : "translateY(-50%)",
           }}
         >
           <h3 className="text-lg font-semibold uppercase tracking-wide">
@@ -169,13 +158,13 @@ function EventCard({ event }: { event: Event }) {
           </h3>
         </div>
 
-        {isExpanded && (
+        {/* Details that appear on hover */}
+        {showDetails && (
           <motion.div
             className="mt-4 flex flex-col items-center gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, delay: 0.12 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
             {event.description && (
               <p className="text-sm text-slate-200">{event.description}</p>
@@ -190,7 +179,7 @@ function EventCard({ event }: { event: Event }) {
               )}
             </div>
 
-            <button className="rounded-md border border-white bg-transparent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40">
+            <button className="rounded-md border border-white bg-transparent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20">
               Learn More
             </button>
           </motion.div>
@@ -231,6 +220,7 @@ export default function EventsPage() {
           Events
         </motion.h1>
 
+        {/* Filter Dropdown */}
         <div className="mb-8 flex justify-center">
           <AnimatedDropdown
             items={dropdownItems}
@@ -241,6 +231,7 @@ export default function EventsPage() {
           />
         </div>
 
+        {/* Selected Club Title */}
         {selectedClub !== "All Clubs" && (
           <motion.div
             className="mb-8 text-center text-4xl font-bold sm:text-5xl"
@@ -252,6 +243,7 @@ export default function EventsPage() {
           </motion.div>
         )}
 
+        {/* Events Grid */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {filteredEvents.map((event) => (
             <EventCard key={event.eventName} event={event} />

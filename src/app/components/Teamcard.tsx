@@ -2,55 +2,61 @@
 
 import Image from "next/image";
 import { FaInstagram, FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import {
+  cardGlassBackground,
+  cardOuterRadiusClass,
+  cardSurfaceClasses,
+} from "./cardTokens";
+import { contentContainerClass } from "./layoutTokens";
 
 const teamMembers = [
   {
     name: "William Foster",
     role: "Co-Founder & CEO",
-    img: "/prakhar.jpg",
+    img: "/sadf.jpg",
   },
   {
     name: "Emily Jonson",
     role: "CEO",
-    img: "/team/emily.jpg",
+    img: "/sadf.jpg",
   },
   {
     name: "Harshita Patel",
     role: "HR",
-    img: "/team/harshita.jpg",
+    img: "/sadf.jpg",
   },
   {
     name: "Eleanor Morales",
     role: "HR",
-    img: "/team/eleanor.jpg",
+    img: "/sadf.jpg",
   },
   {
     name: "Sophia Monic",
     role: "Product Manager",
-    img: "/team/sophia.jpg",
+    img: "/sadf.jpg",
   },
   {
     name: "James Miller",
     role: "Marketing Lead",
-    img: "/team/james.jpg",
+    img: "/sadf.jpg",
   },
 ];
 
 export default function TeamSection() {
   return (
-    <section className="bg-[#0F1114] text-gray-200 py-20 px-6">
-      <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-3">Our Exceptional Team</h2>
-        <p className="text-gray-400 mb-12">
-          Meet our outstanding team - a synergy of talent, creativity,<br />
-          and dedication, crafting success together.
-        </p>
+    <section className="bg-[#0F1114] py-20 text-gray-200">
+      <div
+        className={`${contentContainerClass} flex flex-col items-center gap-12 text-center`}
+      >
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+          Developers
+        </h1>
 
-        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid w-full gap-10 sm:grid-cols-2 md:grid-cols-3">
           {teamMembers.map((member, i) => (
             <div
               key={i}
-              className="bg-[#1b1e23] rounded-2xl p-6 hover:bg-[#23272d] transition shadow-lg"
+              className={`${cardOuterRadiusClass} ${cardSurfaceClasses} ${cardGlassBackground} p-6 transition hover:border-sky-400/50 hover:bg-white/10`}
             >
               <div className="flex justify-center">
                 <Image
@@ -62,10 +68,10 @@ export default function TeamSection() {
                 />
               </div>
 
-              <h3 className="text-xl font-semibold mt-4">{member.name}</h3>
-              <p className="text-gray-500 text-sm">{member.role}</p>
+              <h3 className="mt-4 text-xl font-semibold">{member.name}</h3>
+              <p className="text-sm text-gray-400">{member.role}</p>
 
-              <div className="flex justify-center gap-4 mt-4 text-lg text-gray-400">
+              <div className="mt-4 flex justify-center gap-4 text-lg text-gray-400">
                 <FaLinkedinIn className="cursor-pointer hover:text-white" />
                 <FaInstagram className="cursor-pointer hover:text-white" />
                 <FaFacebookF className="cursor-pointer hover:text-white" />
