@@ -42,7 +42,8 @@ export default function TeamSection() {
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-4xl font-bold mb-3">Our Exceptional Team</h2>
         <p className="text-gray-400 mb-12">
-          Meet our outstanding team - a synergy of talent, creativity,<br />
+          Meet our outstanding team - a synergy of talent, creativity,
+          <br />
           and dedication, crafting success together.
         </p>
 

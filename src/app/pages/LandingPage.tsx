@@ -1,5 +1,4 @@
 import AstroAndFont from "../components/Astro";
-import Navbar from "../components/navbar";
 
 import HomePageCard from "../components/HomepageCard";
 const backgroundStyle: React.CSSProperties = {
@@ -20,16 +19,13 @@ export default function LandingPage() {
     <div style={backgroundStyle} className="min-h-screen min-w-screen ">
       <div className=" flex flex-col">
         <div>
-          <Navbar />
-        </div>
-        <div>
           <AstroAndFont />
         </div>
         <div className=" flex flex-row justify-between  mt-40 p-10 gap-20 ">
-            <HomePageCard />
-            <HomePageCard />
+          <HomePageCard />
+          <HomePageCard />
         </div>
-      </div >
+      </div>
     </div>
   );
 }
