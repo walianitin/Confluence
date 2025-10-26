@@ -135,7 +135,7 @@ export default function Page() {
     <main className={pageStyles.main}>
       <div className={pageStyles.aurora} />
       <div className={pageStyles.container}>
-        <header className={`${pageStyles.headerShell} mb-8`}>
+        <header className={`${pageStyles.headerShell} mb-12`}>
           <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
             Sponsors
           </h1>

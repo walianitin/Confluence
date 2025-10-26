@@ -6,14 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { glassPanel } from "./glassTokens";
+import { useActiveSection } from "./ActiveSectionContext";
 
 const navLinks = [
-  { name: "Home", id: "home", link: "/" },
+  { name: "Gallery", id: "gallery", link: "/Gallery" },
   { name: "Events", id: "events", link: "/Events" },
   { name: "Developers", id: "developers", link: "/Developers" },
   { name: "Teams", id: "teams", link: "/Teams" },
   { name: "Sponsors", id: "sponsors", link: "/Sponsors" },
-  { name: "Gallery", id: "gallery", link: "/Gallery" },
 ];
 
 const GlassNavBar: React.FC = () => {
@@ -21,10 +21,20 @@ const GlassNavBar: React.FC = () => {
   const [indicator, setIndicator] = useState({ left: 0, width: 0, height: 0 });
   const [indicatorReady, setIndicatorReady] = useState(false);
   const pathname = usePathname();
+  const { activeSection, setActiveSection } = useActiveSection();
   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
+  const isHome = pathname === "/";
+
   const getActiveLink = () => {
+    if (isHome) {
+      const activeFromSection = navLinks.find(
+        (link) => link.id === activeSection
+      );
+      return activeFromSection ?? navLinks[0];
+    }
+
     const active = navLinks.find((link) => link.link === pathname);
     return active ?? navLinks[0];
   };
@@ -58,7 +68,7 @@ const GlassNavBar: React.FC = () => {
 
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, activeSection, isHome]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,7 +80,7 @@ const GlassNavBar: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, activeSection, isHome]);
 
   return (
     <>
@@ -79,7 +89,10 @@ const GlassNavBar: React.FC = () => {
         className={`fixed top-4 left-1/2 z-50 w-[min(92vw,720px)] -translate-x-1/2 flex items-center justify-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-sm whitespace-nowrap sm:gap-2 sm:px-4 sm:py-2 ${glassPanel}`}
         style={{ scrollbarGutter: "stable both-edges" }}
       >
-        <div className="flex shrink-0 items-center justify-center px-2 sm:px-3">
+        <Link
+          href="/"
+          className="flex shrink-0 items-center justify-center px-2 sm:px-3"
+        >
           <Image
             src="/conflu25White.png"
             width={120}
@@ -88,7 +101,7 @@ const GlassNavBar: React.FC = () => {
             className="h-8 w-auto sm:h-10"
             priority
           />
-        </div>
+        </Link>
         <div
           ref={tabsContainerRef}
           className="tabs-scroll relative flex items-center gap-1.5 overflow-x-auto"
@@ -118,7 +131,9 @@ const GlassNavBar: React.FC = () => {
           )}
 
           {navLinks.map((link) => {
-            const isActive = pathname === link.link;
+            const isActive = isHome
+              ? activeSection === link.id
+              : pathname === link.link;
 
             return (
               <Link
@@ -131,8 +146,23 @@ const GlassNavBar: React.FC = () => {
                 onFocus={() => setHoveredLink(link.id)}
                 onMouseLeave={() => setHoveredLink(null)}
                 onBlur={() => setHoveredLink(null)}
-                onClick={() => {
+                onClick={(event) => {
+                  if (isHome) {
+                    event.preventDefault();
+                    const section = document.getElementById(link.id);
+                    if (section) {
+                      section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }
+
                   updateIndicator(link.id);
+
+                  if (isHome) {
+                    setActiveSection(link.id);
+                  }
                 }}
                 className={`relative flex items-center justify-center rounded-full px-3 py-1.5 transition-colors capitalize sm:px-4 sm:py-2 ${
                   isActive

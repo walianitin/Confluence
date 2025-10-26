@@ -48,7 +48,7 @@ export default function TeamSection() {
       <div
         className={`${contentContainerClass} flex flex-col items-center gap-12 text-center`}
       >
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+        <h1 className="mb-12 text-5xl font-bold tracking-tight sm:text-6xl">
           Developers
         </h1>
 
