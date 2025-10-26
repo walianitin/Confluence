@@ -2,6 +2,12 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import {
+  CARD_OUTER_RADIUS_PX,
+  cardGlassBackground,
+  cardSurfaceClasses,
+} from "../components/cardTokens";
+import { contentContainerClass } from "../components/layoutTokens";
 
 type Sponsor = {
   name: string;
@@ -54,7 +60,7 @@ const pageStyles = {
   main: "relative isolate overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 py-24 text-white",
   aurora:
     "absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.2),_transparent_55%)]",
-  container: "mx-auto flex max-w-6xl flex-col gap-16 px-6 sm:px-10 lg:px-12",
+  container: `${contentContainerClass} flex flex-col gap-16`,
   headerShell: "mx-auto max-w-3xl text-center",
   headerBadge: "text-sm uppercase tracking-[0.35em] text-sky-300/80",
   headerTitle: "mt-4 text-4xl font-semibold leading-tight sm:text-5xl",
@@ -66,28 +72,19 @@ const pageStyles = {
   sectionHeadingText:
     "text-center text-lg font-medium uppercase tracking-[0.3em] text-sky-200/90",
   grid: "grid gap-6 sm:grid-cols-2 lg:grid-cols-3",
-  card: "group relative flex w-full flex-col rounded-3xl border border-white/10 bg-white/5 p-2 text-center shadow-2xl backdrop-blur transition duration-200 ease-out hover:border-sky-400/80",
-  logoWrap:
-    "relative w-full overflow-hidden rounded-[1rem] border border-white/10 bg-slate-900/80",
   logoBox: "relative w-full pb-[100%]",
   logoImage: "object-cover",
-  sponsorName: "pt-1 text-sm font-medium text-slate-100",
+  sponsorName: "text-sm font-medium text-slate-100",
 } as const;
 
 function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
-  // Outer Radius = Inner Radius + Padding
-  // Card: outer radius = 1.5rem, padding = 0.5rem
-  // Logo: inner radius = 1rem (1.5rem - 0.5rem)
-  const cardPadding = 8; // 0.5rem = 8px
-  const outerRadius = 24; // 1.5rem = 24px
-  const innerRadius = outerRadius - cardPadding; // 16px = 1rem
+  const outerRadius = CARD_OUTER_RADIUS_PX;
 
   return (
     <motion.article
-      className="group relative flex w-full flex-col border border-white/10 bg-white/5 text-center shadow-2xl backdrop-blur transition duration-200 ease-out hover:border-sky-400/80"
+      className={`group relative flex w-full flex-col overflow-hidden text-center shadow-2xl transition duration-200 ease-out ${cardSurfaceClasses} ${cardGlassBackground} hover:border-sky-400/80`}
       style={{
         borderRadius: `${outerRadius}px`,
-        padding: `${cardPadding}px`,
       }}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -95,10 +92,9 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <motion.div
-        className="relative w-full overflow-hidden border border-white/10 bg-slate-900/80"
-        style={{ borderRadius: `${innerRadius}px` }}
-        initial={{ opacity: 0.6 }}
-        animate={{ opacity: 1 }}
+        className="relative w-full overflow-hidden"
+        initial={{ opacity: 0.6, scale: 1.02 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className={pageStyles.logoBox}>
@@ -108,11 +104,13 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
             fill
             sizes="(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 220px"
             quality={90}
-            className={pageStyles.logoImage}
+            className={`${pageStyles.logoImage} transition duration-300 group-hover:scale-[1.02]`}
           />
         </div>
       </motion.div>
-      <p className={pageStyles.sponsorName}>{sponsor.name}</p>
+      <div className="px-4 py-4">
+        <p className={pageStyles.sponsorName}>{sponsor.name}</p>
+      </div>
     </motion.article>
   );
 }
@@ -137,13 +135,10 @@ export default function Page() {
     <main className={pageStyles.main}>
       <div className={pageStyles.aurora} />
       <div className={pageStyles.container}>
-        <header className={pageStyles.headerShell}>
-          <p className={pageStyles.headerBadge}>Confluence 2025</p>
-          <h1 className={pageStyles.headerTitle}>Cosmic Carnival Sponsors</h1>
-          <p className={pageStyles.headerCopy}>
-            Celebrating the stellar brands that power our annual cultural fest.
-            Each partner brings a unique spark to the cosmos of Confluence.
-          </p>
+        <header className={`${pageStyles.headerShell} mb-8`}>
+          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+            Sponsors
+          </h1>
         </header>
 
         <div className={pageStyles.sections}>

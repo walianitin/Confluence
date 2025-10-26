@@ -1,3 +1,13 @@
+import Image from "next/image";
+import {
+  CARD_INNER_RADIUS_PX,
+  CARD_OUTER_RADIUS_PX,
+  CARD_PADDING_PX,
+  cardGlassBackground,
+  cardInnerRadiusClass,
+  cardSurfaceClasses,
+} from "./cardTokens";
+
 interface inputProps {
   title: string;
   content: string;
@@ -6,75 +16,119 @@ interface inputProps {
   day: string;
 }
 
-export default function Card(Props: inputProps) {
-  // Outer Radius = Inner Radius + Padding rule
-  const cardRadius = 24; // 1.5rem = 24px (standardized)
+export default function Card(props: inputProps) {
+  const outerRadiusPx = CARD_OUTER_RADIUS_PX;
+  const innerRadiusPx = CARD_INNER_RADIUS_PX;
+  const tileOuterStyle = {
+    borderRadius: `${outerRadiusPx}px`,
+    padding: `${CARD_PADDING_PX}px`,
+  } as const;
+  const tileInnerStyle = {
+    borderRadius: `${innerRadiusPx}px`,
+  } as const;
 
   return (
-    <>
-      <div className="flex flex-row  w-4/5 h-4/5 items-center justify-center gap-15 pl-30 pr-30 ">
-        {/* Left Column */}
-        <div className="w-1/4 h-4/5 backdrop-blur-xs border-0 border-sky-700 bg-transparent flex flex-col justify-center items-center gap-12">
-          <div
-            className="w-full h-[30%] border-1 flex justify-center items-center"
-            style={{
-              backgroundImage: "url(/Gallery/Title_bg.jpg)",
-              scale: 1,
-              opacity: 0.8,
-              backgroundSize: "cover",
-              backgroundPosition: "center", // or 'top left', 'bottom right', etc.
-              backgroundRepeat: "no-repeat",
-              borderRadius: `${cardRadius}px`,
-            }}
+    <div className="flex w-full max-w-6xl flex-col gap-8">
+      <div className="grid gap-6 md:grid-cols-[minmax(220px,1fr)_minmax(360px,1.6fr)_minmax(220px,1fr)]">
+        <div className="flex flex-col gap-6">
+          <article
+            className={`${cardSurfaceClasses} ${cardGlassBackground} p-2`}
+            style={tileOuterStyle}
           >
-            {Props.title}
-          </div>
-          <div
-            className="w-full h-[68%] border-1 flex justify-center items-center"
-            style={{
-              borderRadius: `${cardRadius}px`,
-              backgroundImage: "url(/Gallery/Day_bg.svg)",
-              backgroundSize: "cover",
-              backgroundPosition: "center", // or 'top left', 'bottom right', etc.
-              backgroundRepeat: "no-repeat",
-            }}
+            <div
+              className={`relative flex h-32 items-center justify-center overflow-hidden bg-black/40 ${cardInnerRadiusClass}`}
+              style={tileInnerStyle}
+            >
+              <Image
+                src="/sadf.jpg"
+                alt={props.title}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/35" />
+              <span className="relative z-10 px-6 text-lg font-semibold uppercase tracking-wide text-white drop-shadow-lg">
+                {props.title}
+              </span>
+            </div>
+          </article>
+
+          <article
+            className={`${cardSurfaceClasses} ${cardGlassBackground} flex-1 p-2`}
+            style={tileOuterStyle}
           >
-            {Props.content}
-          </div>
+            <div
+              className={`flex h-full w-full items-center justify-center bg-black/30 px-4 text-center text-base text-white/90 ${cardInnerRadiusClass}`}
+              style={tileInnerStyle}
+            >
+              {props.content}
+            </div>
+          </article>
         </div>
-        {/* Right Column */}
-        <div className="w-3/4 h-4/5 backdrop-blur-xs border-0 border-sky-700 bg-transparent flex flex-row gap-12 ">
+
+        <article
+          className={`${cardSurfaceClasses} ${cardGlassBackground} p-2`}
+          style={tileOuterStyle}
+        >
           <div
-            className="w-4/5 h-full border-2 flex justify-center items-center"
-            style={{ borderRadius: `${cardRadius}px` }}
+            className={`relative h-[360px] w-full overflow-hidden ${cardInnerRadiusClass}`}
+            style={tileInnerStyle}
           >
-            {Props.image}
+            <Image
+              src="/sadf.jpg"
+              alt={props.image || props.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, 45vw"
+            />
           </div>
-          <div
-            className="w-3/4 h-full flex flex-col justify-center items-center gap-10"
-            style={{ borderRadius: `${cardRadius}px` }}
+        </article>
+
+        <div className="flex flex-col gap-6">
+          <article
+            className={`${cardSurfaceClasses} ${cardGlassBackground} p-2`}
+            style={tileOuterStyle}
           >
             <div
-              className="w-full h-1/5 border-2"
-              style={{
-                borderRadius: `${cardRadius}px`,
-                backgroundImage: "url(/Gallery/Day_bg.jpg)",
-                backgroundSize: "cover",
-                backgroundPosition: "center", // or 'top left', 'bottom right', etc.
-                backgroundRepeat: "no-repeat",
-              }}
+              className={`relative flex h-32 items-center justify-center overflow-hidden bg-black/40 ${cardInnerRadiusClass}`}
+              style={tileInnerStyle}
             >
-              {Props.day}
+              <Image
+                src="/sadf.jpg"
+                alt={`${props.day} background`}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/35" />
+              <span className="relative z-10 px-4 text-lg font-semibold uppercase tracking-wide text-white drop-shadow">
+                {props.day}
+              </span>
             </div>
+          </article>
+
+          <article
+            className={`${cardSurfaceClasses} ${cardGlassBackground} flex-1 p-2`}
+            style={tileOuterStyle}
+          >
             <div
-              className="w-full h-4/5 border-2"
-              style={{ borderRadius: `${cardRadius}px` }}
+              className={`relative flex h-full w-full flex-col overflow-hidden ${cardInnerRadiusClass}`}
+              style={tileInnerStyle}
             >
-              {Props.vector}
+              <div className="relative h-32 w-full overflow-hidden">
+                <Image
+                  src="/sadf.jpg"
+                  alt={`${props.vector} artwork`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-1 items-center justify-center px-4 py-6 text-center text-base text-white">
+                {props.vector}
+              </div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,18 +1,18 @@
 "use client";
 import { useState, type CSSProperties } from "react";
 import Card from "../components/GalleryCard";
+import { contentContainerClass } from "../components/layoutTokens";
+
 const backgroundStyle: CSSProperties = {
   backgroundImage: 'url("/Evente_bg.svg")',
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
-  width: "100vw",
+  width: "100%",
   minHeight: "100vh",
-  scale: "1",
-  margin: 0,
   opacity: 0.8,
-  padding: 0,
 };
+
 const data = [
   {
     title: "libas",
@@ -50,6 +50,7 @@ const data = [
     vector: "asd",
   },
 ];
+
 export default function Gallery() {
   const [index, setIndex] = useState(0);
   const size = data.length;
@@ -67,12 +68,17 @@ export default function Gallery() {
   };
 
   return (
-    <>
+    <div
+      className="flex min-h-screen w-full items-center justify-center"
+      style={backgroundStyle}
+    >
       <div
-        className="w-screen h-screen flex flex-col items-center justify-center "
-        style={backgroundStyle}
+        className={`${contentContainerClass} flex flex-col items-center justify-center gap-6`}
       >
-        {/* Gallery Card */}
+        <h1 className="mb-4 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl">
+          Gallery
+        </h1>
+
         <Card
           title={data[index].title}
           content={data[index].content}
@@ -81,21 +87,20 @@ export default function Gallery() {
           vector={data[index].vector}
         />
 
-        {/* Navigation Controls */}
-        <div className="flex gap-4 mt-6">
+        <div className="flex items-center gap-4">
           <button
             onClick={prevItem}
-            className="px-4 py-2 bg-white/20 backdrop-blur text-white rounded-lg hover:bg-white/30 transition-colors cursor-pointer"
+            className="cursor-pointer rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
           >
             Previous
           </button>
 
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
             {data.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goToIndex(i)}
-                className={`w-3 h-3 rounded-full transition-colors ${
+                className={`h-3 w-3 rounded-full transition-colors ${
                   i === index ? "bg-white" : "bg-white/40"
                 }`}
               />
@@ -104,17 +109,16 @@ export default function Gallery() {
 
           <button
             onClick={nextItem}
-            className="px-4 py-2 bg-white/20 backdrop-blur text-white rounded-lg hover:bg-white/30 transition-colors cursor-pointer "
+            className="cursor-pointer rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
           >
             Next
           </button>
         </div>
 
-        {/* Counter */}
-        <div className="mt-4 text-white/80 ">
+        <div className="text-white/80">
           {index + 1} / {size}
         </div>
       </div>
-    </>
+    </div>
   );
 }
