@@ -1,8 +1,9 @@
 "use client";
-import { Key, useMemo, useState } from "react";
+import { Key, useMemo, useState, useRef } from "react";
 import SecyCard from "../components/SecyCard";
 import AnimatedDropdown from "../components/AnimatedDropdown";
 import { contentContainerClass } from "../components/layoutTokens";
+import Pagination, { usePagination } from "../components/Pagination";
 
 const teams = {
   Photog: [
@@ -88,18 +89,30 @@ const teams = {
 export default function TeamSection() {
   const [selectedClub, setSelectedClub] =
     useState<keyof typeof teams>("Photog");
+  const sectionRef = useRef<HTMLElement>(null);
+
   const teamOptions = useMemo(
     () => Object.keys(teams).map((club) => ({ id: club, label: club })),
     []
   );
 
+  const currentTeamMembers = teams[selectedClub];
+
+  // Pagination: 9 items per page
+  const {
+    currentItems: paginatedMembers,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+  } = usePagination(currentTeamMembers, 9);
+
   return (
-    <section className="w-full py-12">
+    <section ref={sectionRef} className="relative w-full py-12">
       <div
         className={`${contentContainerClass} flex flex-col items-center gap-10`}
       >
-        <h1 className="text-center text-5xl font-bold tracking-tight text-white sm:text-6xl">
-          Teams
+        <h1 className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl">
+          TEAMS
         </h1>
 
         <AnimatedDropdown
@@ -110,10 +123,8 @@ export default function TeamSection() {
           className="w-full max-w-xs"
         />
 
-        <h2 className="text-3xl font-semibold text-white/90">{selectedClub}</h2>
-
         <div className="flex w-full flex-wrap justify-center gap-8 md:justify-between xl:gap-12">
-          {teams[selectedClub].map(
+          {paginatedMembers.map(
             (
               member: { name: string; role: string; desc: string; img: string },
               index: Key | null | undefined
@@ -128,6 +139,15 @@ export default function TeamSection() {
             )
           )}
         </div>
+
+        {/* Pagination Controls */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          sectionRef={sectionRef}
+          className="mt-8"
+        />
       </div>
     </section>
   );

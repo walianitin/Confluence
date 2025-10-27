@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
+import { ActiveSectionProvider } from "./components/ActiveSectionContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,9 +31,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{ scrollbarGutter: "stable both-edges" }}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <ActiveSectionProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </ActiveSectionProvider>
       </body>
     </html>
   );
