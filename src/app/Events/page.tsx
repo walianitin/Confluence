@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { useMemo, useState, KeyboardEvent } from "react";
+import { useMemo, useState, KeyboardEvent, useRef } from "react";
 import { motion } from "framer-motion";
 import AnimatedDropdown from "../components/AnimatedDropdown";
 import {
@@ -11,6 +10,8 @@ import {
   cardSurfaceClasses,
 } from "../components/cardTokens";
 import { contentContainerClass } from "../components/layoutTokens";
+import OptimizedImage from "../components/OptimizedImage";
+import Pagination, { usePagination } from "../components/Pagination";
 
 type Event = {
   eventName: string;
@@ -89,6 +90,34 @@ const allEvents: Event[] = [
     clubName: "Drama Club",
     description: "Stand-up comedy from the stars",
   },
+  {
+    eventName: "Quantum Quiz Bowl",
+    image: "/sadf.jpg",
+    venue: "Tech Hub",
+    clubName: "Tech Society",
+    description: "Test your knowledge across dimensions",
+  },
+  {
+    eventName: "Stardust Street Play",
+    image: "/sadf.jpg",
+    venue: "Open Courtyard",
+    clubName: "Drama Club",
+    description: "Interactive theater under open skies",
+  },
+  {
+    eventName: "Orbital Beatbox Battle",
+    image: "/sadf.jpg",
+    venue: "Open Air Stage",
+    clubName: "Music Society",
+    description: "Vocal percussion from the cosmos",
+  },
+  {
+    eventName: "Celestial Canvas",
+    image: "/sadf.jpg",
+    venue: "Creative Space",
+    clubName: "Fine Arts",
+    description: "Live painting inspired by the universe",
+  },
 ];
 
 function EventCard({ event }: { event: Event }) {
@@ -128,11 +157,10 @@ function EventCard({ event }: { event: Event }) {
         animate={{ scale: isExpanded ? 1.04 : 1 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
       >
-        <Image
+        <OptimizedImage
           src={event.image}
           alt={event.eventName}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover"
         />
       </motion.div>
@@ -202,6 +230,7 @@ function EventCard({ event }: { event: Event }) {
 
 export default function EventsPage() {
   const [selectedClub, setSelectedClub] = useState("All Clubs");
+  const sectionRef = useRef<HTMLElement>(null);
 
   const dropdownItems = useMemo(
     () => clubNames.map((club) => ({ id: club, label: club })),
@@ -217,18 +246,27 @@ export default function EventsPage() {
       ? allEvents
       : allEvents.filter((event) => event.clubName === selectedClub);
 
-  return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 py-24 text-white">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.2),_transparent_55%)]" />
+  // Pagination: 9 items per page
+  const {
+    currentItems: paginatedEvents,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+  } = usePagination(filteredEvents, 9);
 
+  return (
+    <main
+      ref={sectionRef}
+      className="relative min-h-screen overflow-hidden py-24 text-white"
+    >
       <div className={`${contentContainerClass}`}>
         <motion.h1
-          className="mb-10 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl"
+          className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Events
+          EVENTS
         </motion.h1>
 
         <div className="mb-8 flex justify-center">
@@ -241,7 +279,7 @@ export default function EventsPage() {
           />
         </div>
 
-        {selectedClub !== "All Clubs" && (
+        {/* {selectedClub !== "All Clubs" && (
           <motion.div
             className="mb-8 text-center text-4xl font-bold sm:text-5xl"
             initial={{ opacity: 0, y: 10 }}
@@ -251,12 +289,21 @@ export default function EventsPage() {
             {selectedClub}
           </motion.div>
         )}
-
+ */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredEvents.map((event) => (
+          {paginatedEvents.map((event) => (
             <EventCard key={event.eventName} event={event} />
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          sectionRef={sectionRef}
+          className="mt-12"
+        />
       </div>
     </main>
   );

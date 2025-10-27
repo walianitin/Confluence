@@ -44,12 +44,12 @@ const teamMembers = [
 
 export default function TeamSection() {
   return (
-    <section className="bg-[#0F1114] py-20 text-gray-200">
+    <section className="relative py-20 text-gray-200">
       <div
         className={`${contentContainerClass} flex flex-col items-center gap-12 text-center`}
       >
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
-          Developers
+        <h1 className="mb-12 text-5xl font-bold tracking-tight sm:text-6xl">
+          DEVELOPERS
         </h1>
 
         <div className="grid w-full gap-10 sm:grid-cols-2 md:grid-cols-3">
