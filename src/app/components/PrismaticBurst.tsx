@@ -257,7 +257,7 @@ const PrismaticBurst = ({
     const renderer = new Renderer({
       alpha: false,
     });
-  (renderer as Renderer & { dpr: number }).dpr = dpr;
+    (renderer as Renderer & { dpr: number }).dpr = dpr;
     rendererRef.current = renderer;
 
     const gl = renderer.gl;

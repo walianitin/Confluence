@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, KeyboardEvent } from "react";
+import { useMemo, useState, KeyboardEvent, useRef } from "react";
 import { motion } from "framer-motion";
 import AnimatedDropdown from "../components/AnimatedDropdown";
 import {
@@ -11,6 +11,7 @@ import {
 } from "../components/cardTokens";
 import { contentContainerClass } from "../components/layoutTokens";
 import OptimizedImage from "../components/OptimizedImage";
+import Pagination, { usePagination } from "../components/Pagination";
 
 type Event = {
   eventName: string;
@@ -88,6 +89,34 @@ const allEvents: Event[] = [
     venue: "Auditorium",
     clubName: "Drama Club",
     description: "Stand-up comedy from the stars",
+  },
+  {
+    eventName: "Quantum Quiz Bowl",
+    image: "/sadf.jpg",
+    venue: "Tech Hub",
+    clubName: "Tech Society",
+    description: "Test your knowledge across dimensions",
+  },
+  {
+    eventName: "Stardust Street Play",
+    image: "/sadf.jpg",
+    venue: "Open Courtyard",
+    clubName: "Drama Club",
+    description: "Interactive theater under open skies",
+  },
+  {
+    eventName: "Orbital Beatbox Battle",
+    image: "/sadf.jpg",
+    venue: "Open Air Stage",
+    clubName: "Music Society",
+    description: "Vocal percussion from the cosmos",
+  },
+  {
+    eventName: "Celestial Canvas",
+    image: "/sadf.jpg",
+    venue: "Creative Space",
+    clubName: "Fine Arts",
+    description: "Live painting inspired by the universe",
   },
 ];
 
@@ -201,6 +230,7 @@ function EventCard({ event }: { event: Event }) {
 
 export default function EventsPage() {
   const [selectedClub, setSelectedClub] = useState("All Clubs");
+  const sectionRef = useRef<HTMLElement>(null);
 
   const dropdownItems = useMemo(
     () => clubNames.map((club) => ({ id: club, label: club })),
@@ -216,8 +246,19 @@ export default function EventsPage() {
       ? allEvents
       : allEvents.filter((event) => event.clubName === selectedClub);
 
+  // Pagination: 9 items per page
+  const {
+    currentItems: paginatedEvents,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+  } = usePagination(filteredEvents, 9);
+
   return (
-    <main className="relative min-h-screen overflow-hidden py-24 text-white">
+    <main
+      ref={sectionRef}
+      className="relative min-h-screen overflow-hidden py-24 text-white"
+    >
       <div className={`${contentContainerClass}`}>
         <motion.h1
           className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl"
@@ -250,10 +291,19 @@ export default function EventsPage() {
         )}
  */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredEvents.map((event) => (
+          {paginatedEvents.map((event) => (
             <EventCard key={event.eventName} event={event} />
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          sectionRef={sectionRef}
+          className="mt-12"
+        />
       </div>
     </main>
   );

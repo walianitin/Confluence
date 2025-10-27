@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useRef } from "react";
 import Card from "../components/GalleryCard";
 import { contentContainerClass } from "../components/layoutTokens";
+import Pagination, { usePagination } from "../components/Pagination";
 
 const data = [
   {
@@ -39,26 +40,73 @@ const data = [
     day: "day1",
     vector: "asd",
   },
+  {
+    title: "Tech Event",
+    content: "contene",
+    image: "/adsfa",
+    day: "day2",
+    vector: "asd",
+  },
+  {
+    title: "Dance Night",
+    content: "contene",
+    image: "/adsfa",
+    day: "day2",
+    vector: "asd",
+  },
+  {
+    title: "Art Show",
+    content: "contene",
+    image: "/adsfa",
+    day: "day2",
+    vector: "asd",
+  },
+  {
+    title: "Music Fest",
+    content: "contene",
+    image: "/adsfa",
+    day: "day3",
+    vector: "asd",
+  },
+  {
+    title: "Drama Play",
+    content: "contene",
+    image: "/adsfa",
+    day: "day3",
+    vector: "asd",
+  },
+  {
+    title: "Gaming Arena",
+    content: "contene",
+    image: "/adsfa",
+    day: "day3",
+    vector: "asd",
+  },
+  {
+    title: "Fashion Walk",
+    content: "contene",
+    image: "/adsfa",
+    day: "day3",
+    vector: "asd",
+  },
 ];
 
 export default function Gallery() {
-  const [index, setIndex] = useState(0);
-  const size = data.length;
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const nextItem = () => {
-    setIndex((prev) => (prev + 1) % size);
-  };
-
-  const prevItem = () => {
-    setIndex((prev) => (prev - 1 + size) % size);
-  };
-
-  const goToIndex = (newIndex: number) => {
-    setIndex(newIndex);
-  };
+  // Pagination: 1 item per page (carousel style)
+  const {
+    currentItems: paginatedImages,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+  } = usePagination(data, 1);
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center">
+    <div
+      ref={sectionRef}
+      className="flex min-h-screen w-full items-center justify-center py-24"
+    >
       <div
         className={`${contentContainerClass} flex flex-col items-center justify-center gap-6`}
       >
@@ -66,45 +114,25 @@ export default function Gallery() {
           GALLERY
         </h1>
 
-        <Card
-          title={data[index].title}
-          content={data[index].content}
-          image={data[index].image}
-          day={data[index].day}
-          vector={data[index].vector}
+        {/* Single Card Display */}
+        {paginatedImages[0] && (
+          <Card
+            title={paginatedImages[0].title}
+            content={paginatedImages[0].content}
+            image={paginatedImages[0].image}
+            day={paginatedImages[0].day}
+            vector={paginatedImages[0].vector}
+          />
+        )}
+
+        {/* Pagination Controls */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          sectionRef={sectionRef}
+          className="mt-8"
         />
-
-        <div className="flex items-center gap-4">
-          <button
-            onClick={prevItem}
-            className="cursor-pointer rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-          >
-            Previous
-          </button>
-
-          <div className="flex items-center gap-2">
-            {data.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goToIndex(i)}
-                className={`h-3 w-3 rounded-full transition-colors ${
-                  i === index ? "bg-white" : "bg-white/40"
-                }`}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={nextItem}
-            className="cursor-pointer rounded-lg bg-white/20 px-4 py-2 text-white transition-colors hover:bg-white/30"
-          >
-            Next
-          </button>
-        </div>
-
-        <div className="text-white/80">
-          {index + 1} / {size}
-        </div>
       </div>
     </div>
   );
