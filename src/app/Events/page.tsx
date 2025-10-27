@@ -11,7 +11,16 @@ import {
   cardSurfaceClasses,
 } from "../components/cardTokens";
 import { contentContainerClass } from "../components/layoutTokens";
-
+import {  type CSSProperties } from "react";
+const backgroundStyle: CSSProperties = {
+  backgroundImage: 'url("/Event3_bg.jpg")',
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  width: "100%",
+  minHeight: "100vh",
+  opacity: 0.7,
+};
 type Event = {
   eventName: string;
   image: string;
@@ -218,7 +227,7 @@ export default function EventsPage() {
       : allEvents.filter((event) => event.clubName === selectedClub);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 py-24 text-white">
+    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 py-24 text-white" style={backgroundStyle}>
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.2),_transparent_55%)]" />
 
       <div className={`${contentContainerClass}`}>
