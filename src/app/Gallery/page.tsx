@@ -63,7 +63,7 @@ export default function Gallery() {
         className={`${contentContainerClass} flex flex-col items-center justify-center gap-6`}
       >
         <h1 className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl">
-          Gallery
+          GALLERY
         </h1>
 
         <Card

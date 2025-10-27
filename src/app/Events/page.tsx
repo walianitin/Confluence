@@ -225,7 +225,7 @@ export default function EventsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          Events
+          EVENTS
         </motion.h1>
 
         <div className="mb-8 flex justify-center">
@@ -238,7 +238,7 @@ export default function EventsPage() {
           />
         </div>
 
-        {selectedClub !== "All Clubs" && (
+        {/* {selectedClub !== "All Clubs" && (
           <motion.div
             className="mb-8 text-center text-4xl font-bold sm:text-5xl"
             initial={{ opacity: 0, y: 10 }}
@@ -248,7 +248,7 @@ export default function EventsPage() {
             {selectedClub}
           </motion.div>
         )}
-
+ */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {filteredEvents.map((event) => (
             <EventCard key={event.eventName} event={event} />

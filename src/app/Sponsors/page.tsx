@@ -134,7 +134,7 @@ export default function Page() {
       <div className={pageStyles.container}>
         <header className={`${pageStyles.headerShell} mb-12`}>
           <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
-            Sponsors
+            SPONSORS
           </h1>
         </header>
 

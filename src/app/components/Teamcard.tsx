@@ -49,7 +49,7 @@ export default function TeamSection() {
         className={`${contentContainerClass} flex flex-col items-center gap-12 text-center`}
       >
         <h1 className="mb-12 text-5xl font-bold tracking-tight sm:text-6xl">
-          Developers
+          DEVELOPERS
         </h1>
 
         <div className="grid w-full gap-10 sm:grid-cols-2 md:grid-cols-3">

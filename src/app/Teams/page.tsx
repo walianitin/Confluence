@@ -99,7 +99,7 @@ export default function TeamSection() {
         className={`${contentContainerClass} flex flex-col items-center gap-10`}
       >
         <h1 className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl">
-          Teams
+          TEAMS
         </h1>
 
         <AnimatedDropdown
