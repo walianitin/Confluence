@@ -1,26 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import PrismaticBurst from "../components/PrismaticBurst";
 
 const ANIMATION_CONFIG = {
   animationType: "rotate3d" as const,
-  intensity: 3.5,
-  speed: 0.4,
-  distort: 2.5,
-  rayCount: 32,
+  intensity: 4.5,
+  speed: 0.2,
+  distort: 2,
+  rayCount: 25,
   mixBlendMode: "lighten" as const,
-  colors: [
-    "#FF0080",
-    "#FF00FF",
-    "#8B00FF",
-    "#4169E1",
-    "#00BFFF",
-    "#00FFFF",
-    "#FFFFFF",
-  ],
+  colors: ["#4000ffff", "#ffdd00ff", "#8B00FF"],
   hoverDampness: 0.15,
   offset: { x: 0, y: 0 },
   paused: false,
@@ -36,7 +28,7 @@ const LAYOUT_CONFIG = {
   // Animation background height extension
   // Extends the PrismaticBurst animation beyond the page bounds
   // Use this to avoid abrupt cutoff when scrolling
-  animationHeight: "120vh", // Can be larger than sectionHeight
+  animationHeight: "160vh", // Can be larger than sectionHeight
 
   // Whether animation should be fixed or scroll with content
   // 'absolute' = scrolls naturally with page
@@ -48,7 +40,7 @@ const LAYOUT_CONFIG = {
 const VIGNETTE_CONFIG = {
   // Overall opacity of the animation background (0 to 1)
   // Lower = more transparent, smoother blend with wallpaper
-  backgroundOpacity: 0.8,
+  backgroundOpacity: 0.9,
 
   // Radial gradient vignette settings
   vignette: {
@@ -77,6 +69,15 @@ export default function LandingPage() {
   const [introComplete, setIntroComplete] = useState(false);
   const [showBackground, setShowBackground] = useState(false);
   const [showHero, setShowHero] = useState(false);
+
+  const baseBackgroundStyle: CSSProperties = {
+    position: LAYOUT_CONFIG.animationPosition,
+    top: "50%",
+    left: 0,
+    right: 0,
+    height: LAYOUT_CONFIG.animationHeight,
+    transform: "translateY(-50%)",
+  };
 
   const handleVideoComplete = () => {
     setIntroComplete(true);
@@ -146,21 +147,11 @@ export default function LandingPage() {
             style={
               VIGNETTE_CONFIG.vignette.enabled
                 ? {
-                    position: LAYOUT_CONFIG.animationPosition,
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: LAYOUT_CONFIG.animationHeight,
+                    ...baseBackgroundStyle,
                     maskImage: `radial-gradient(circle at center, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.centerOpacity}) ${VIGNETTE_CONFIG.vignette.innerRadius}%, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.edgeOpacity}) ${VIGNETTE_CONFIG.vignette.outerRadius}%)`,
                     WebkitMaskImage: `radial-gradient(circle at center, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.centerOpacity}) ${VIGNETTE_CONFIG.vignette.innerRadius}%, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.edgeOpacity}) ${VIGNETTE_CONFIG.vignette.outerRadius}%)`,
                   }
-                : {
-                    position: LAYOUT_CONFIG.animationPosition,
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: LAYOUT_CONFIG.animationHeight,
-                  }
+                : baseBackgroundStyle
             }
           >
             <PrismaticBurst

@@ -110,8 +110,6 @@ export default function TeamSection() {
           className="w-full max-w-xs"
         />
 
-        <h2 className="text-3xl font-semibold text-white/90">{selectedClub}</h2>
-
         <div className="flex w-full flex-wrap justify-center gap-8 md:justify-between xl:gap-12">
           {teams[selectedClub].map(
             (

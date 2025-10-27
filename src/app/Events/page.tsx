@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo, useState, KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import AnimatedDropdown from "../components/AnimatedDropdown";
@@ -11,6 +10,7 @@ import {
   cardSurfaceClasses,
 } from "../components/cardTokens";
 import { contentContainerClass } from "../components/layoutTokens";
+import OptimizedImage from "../components/OptimizedImage";
 
 type Event = {
   eventName: string;
@@ -128,11 +128,10 @@ function EventCard({ event }: { event: Event }) {
         animate={{ scale: isExpanded ? 1.04 : 1 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
       >
-        <Image
+        <OptimizedImage
           src={event.image}
           alt={event.eventName}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover"
         />
       </motion.div>
