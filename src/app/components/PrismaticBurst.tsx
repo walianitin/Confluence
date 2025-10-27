@@ -255,10 +255,9 @@ const PrismaticBurst = ({
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const renderer = new Renderer({
-      dpr,
       alpha: false,
-      antialias: false,
-    } as any);
+    });
+  (renderer as Renderer & { dpr: number }).dpr = dpr;
     rendererRef.current = renderer;
 
     const gl = renderer.gl;
@@ -267,8 +266,7 @@ const PrismaticBurst = ({
     canvas.style.inset = "0";
     canvas.style.width = "100%";
     canvas.style.height = "100%";
-    canvas.style.mixBlendMode =
-      mixBlendMode && mixBlendMode !== "none" ? mixBlendMode : "";
+    canvas.style.mixBlendMode = "";
     container.appendChild(canvas);
 
     const white = new Uint8Array([255, 255, 255, 255]);
@@ -375,7 +373,7 @@ const PrismaticBurst = ({
       const sm = mouseSmoothRef.current;
       sm[0] += (tgt[0] - sm[0]) * alpha;
       sm[1] += (tgt[1] - sm[1]) * alpha;
-      program.uniforms.uMouse.value = sm as any;
+      program.uniforms.uMouse.value = sm;
       program.uniforms.uTime.value = accumTime;
       renderer.render({ scene: meshRef.current! });
       raf = requestAnimationFrame(update);
