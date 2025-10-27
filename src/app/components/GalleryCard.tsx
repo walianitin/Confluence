@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getCldImageUrl } from 'next-cloudinary';
 import {
   CARD_INNER_RADIUS_PX,
   CARD_OUTER_RADIUS_PX,
@@ -26,7 +27,17 @@ export default function Card(props: inputProps) {
   const tileInnerStyle = {
     borderRadius: `${innerRadiusPx}px`,
   } as const;
+  // Use NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME when available. If it's not set
+  // fall back to the provided image URL (if it's already a full URL) or a
+  // local placeholder so `next/image` does not throw the unconfigured-host
+  // error. next-cloudinary's getCldImageUrl expects a configured cloud name.
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
+  const url = cloudName
+    ? getCldImageUrl({ width: 960, height: 600, src: props.image })
+    : props.image && /^https?:\/\//i.test(props.image)
+    ? props.image
+    : "/sadf.jpg";
   return (
     <div className="flex w-full max-w-6xl flex-col gap-8">
       <div className="grid gap-6 md:grid-cols-[minmax(220px,1fr)_minmax(360px,1.6fr)_minmax(220px,1fr)]">
@@ -40,7 +51,7 @@ export default function Card(props: inputProps) {
               style={tileInnerStyle}
             >
               <Image
-                src="/sadf.jpg"
+                src={url}
                 alt={props.title}
                 fill
                 className="object-cover"
@@ -57,7 +68,7 @@ export default function Card(props: inputProps) {
             style={tileOuterStyle}
           >
             <div
-              className={`flex h-full w-full items-center justify-center bg-black/30 px-4 text-center text-base text-white/90 ${cardInnerRadiusClass}`}
+              className={`flex h-full w-full items-center tracking-wider justify-center bg-black/30 px-4  text-base text-white/90 ${cardInnerRadiusClass}`}
               style={tileInnerStyle}
             >
               {props.content}
@@ -74,7 +85,7 @@ export default function Card(props: inputProps) {
             style={tileInnerStyle}
           >
             <Image
-              src="/sadf.jpg"
+              src={url}
               alt={props.image || props.title}
               fill
               className="object-cover"
@@ -94,7 +105,7 @@ export default function Card(props: inputProps) {
               style={tileInnerStyle}
             >
               <Image
-                src="/sadf.jpg"
+                src="/bg-wallpaper-old.jpg"
                 alt={`${props.day} background`}
                 fill
                 className="object-cover"
@@ -106,7 +117,7 @@ export default function Card(props: inputProps) {
             </div>
           </article>
 
-          <article
+          {/* <article
             className={`${cardSurfaceClasses} ${cardGlassBackground} flex-1 p-2`}
             style={tileOuterStyle}
           >
@@ -122,11 +133,8 @@ export default function Card(props: inputProps) {
                   className="object-cover"
                 />
               </div>
-              <div className="flex flex-1 items-center justify-center px-4 py-6 text-center text-base text-white">
-                {props.vector}
-              </div>
             </div>
-          </article>
+          </article> */}
         </div>
       </div>
     </div>

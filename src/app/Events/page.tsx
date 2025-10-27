@@ -23,36 +23,37 @@ type Event = {
 
 const clubNames = [
   "All Clubs",
-  "Dance Club",
-  "Music Society",
-  "Fashion Club",
-  "Fine Arts",
-  "Literary Society",
-  "Gaming Club",
-  "Drama Club",
-  "Tech Society",
+  "Photography Club",
+  "Managing & Directing Club",
+  "Fine Arts & Modelling",
+  "Audio Visual Club ",
+  "Colours",
+  "Hiking & Trekking Club",
+  "Spicmacay",
+  "Post Graduate Club",
+  "Lit & Deb Club"
 ];
 
 const allEvents: Event[] = [
   {
     eventName: "Cosmic Dance Battle",
-    image: "/sadf.jpg",
+    image: "https://res.cloudinary.com/dwuy4lzhb/image/upload/v1761593956/Dj_Night_o74sry.jpg",
     venue: "Main Arena",
     clubName: "Dance Club",
     description: "Intergalactic dance-off under the stars",
   },
   {
     eventName: "Stellar DJ Night",
-    image: "/sadf.jpg",
+    image: "/Photog_Poster1.jpg",
     venue: "Open Air Stage",
-    clubName: "Music Society",
+    clubName: "Dance Club",
     description: "Electronic beats from another dimension",
   },
   {
     eventName: "Nebula Fashion Show",
-    image: "/sadf.jpg",
+    image: "",
     venue: "Galaxy Hall",
-    clubName: "Fashion Club",
+    clubName: "Dance Club",
     description: "Runway show featuring cosmic couture",
   },
   {

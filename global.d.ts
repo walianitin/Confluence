@@ -12,16 +12,21 @@ declare module 'ogl' {
       options: {
         vertex: string;
         fragment: string;
-        uniforms?: Record<string, { value: any }>;
+        // Use `unknown` instead of `any` to avoid the `no-explicit-any` lint rule.
+        // Callers can narrow the type as needed (number, array, texture, etc.).
+        uniforms?: Record<string, { value: unknown }>;
       }
     );
-    uniforms: Record<string, { value: any }>;
+  // Use `unknown` here as well to avoid `any` in the declaration.
+  uniforms: Record<string, { value: unknown }>;
   }
 
   export class Mesh {
     constructor(
       gl: WebGLRenderingContext,
-      options: { geometry: any; program: Program }
+      // geometry shape varies between implementations; use `unknown` and
+      // let consumers narrow the type where needed.
+      options: { geometry: unknown; program: Program }
     );
   }
 

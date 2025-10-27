@@ -10,80 +10,50 @@ const teams = {
     {
       name: "Arjun Kapoor",
       role: "Director",
-      desc: "Crafts cinematic stories through still frames.",
-      img: "/sadf.jpg",
+      img: "https://res.cloudinary.com/dyqkhzgv6/image/upload/v1761594920/DSC_5233_edsxqj.jpg",
     },
     {
       name: "Nisha Rao",
       role: "Secretary",
-      desc: "Curates event coverage with precision.",
       img: "/sadf.jpg",
     },
     {
       name: "Kabir Sen",
       role: "Photographer",
-      desc: "Loves experimenting with long-exposure shots.",
+  
       img: "/sadf.jpg",
     },
     {
       name: "Ananya Verma",
       role: "Editor",
-      desc: "Grades every frame for that cosmic glow.",
       img: "/sadf.jpg",
     },
   ],
-  "Tech Team": [
-    {
-      name: "Raj Mehta",
-      role: "Tech Lead",
-      desc: "Architects the fest website and deployments.",
+  "Mad":[
+     {
+      name: "1",
+      role: "Director",
       img: "/sadf.jpg",
     },
-    {
-      name: "Priya Singh",
-      role: "Developer",
-      desc: "Turns wild ideas into slick UI flows.",
+  ], "FineArts":[
+     {
+      name: "1",
+      role: "Director",
       img: "/sadf.jpg",
     },
-    {
-      name: "Tanay Gupta",
-      role: "Backend Engineer",
-      desc: "Keeps APIs humming during peak traffic.",
+  ] ,"Hindi Literature and Debating Club":[
+     {
+      name: "1",
+      role: "Director",
       img: "/sadf.jpg",
     },
-    {
-      name: "Lisa George",
-      role: "QA Analyst",
-      desc: "Bottles sneaky bugs before launch night.",
+  ], "Made":[
+     {
+      name: "1",
+      role: "Director",
       img: "/sadf.jpg",
     },
-  ],
-  "Design Team": [
-    {
-      name: "Ria D'Souza",
-      role: "Lead Designer",
-      desc: "Sets the visual language for every poster.",
-      img: "/sadf.jpg",
-    },
-    {
-      name: "Sam Malhotra",
-      role: "UI/UX Artist",
-      desc: "Sketches immersive journeys for attendees.",
-      img: "/sadf.jpg",
-    },
-    {
-      name: "Isha Kapoor",
-      role: "Illustrator",
-      desc: "Adds playful motion to our cosmos.",
-      img: "/sadf.jpg",
-    },
-    {
-      name: "Zara Khan",
-      role: "Brand Strategist",
-      desc: "Keeps every asset on-theme and on-brand.",
-      img: "/sadf.jpg",
-    },
-  ],
+  ]
 };
 
 export default function TeamSection() {
@@ -126,14 +96,13 @@ export default function TeamSection() {
         <div className="flex w-full flex-wrap justify-center gap-8 md:justify-between xl:gap-12">
           {paginatedMembers.map(
             (
-              member: { name: string; role: string; desc: string; img: string },
+              member: { name: string; role: string; img: string },
               index: Key | null | undefined
             ) => (
               <SecyCard
                 key={index}
                 name={member.name}
                 role={member.role}
-                desc={member.desc}
                 img={member.img}
               />
             )
