@@ -1,109 +1,126 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import PrismaticBurst from "../components/PrismaticBurst";
 
-// Prismatic Burst Animation Configuration
-// Customize these values to adjust the cosmic background effect
 const ANIMATION_CONFIG = {
-  // Animation type: 'rotate' | 'rotate3d' | 'hover'
-  // - rotate: 2D rotation in the XZ plane
-  // - rotate3d: Full 3D rotation (recommended for cosmic effect)
-  // - hover: Interactive, follows mouse movement
   animationType: "rotate3d" as const,
-
-  // Brightness/visibility (0.5 to 3.0, default: 1.5)
-  // Higher = brighter, more visible rays
   intensity: 3.5,
-
-  // Animation speed (0.1 to 2.0, default: 0.3)
-  // Lower = slower, more subtle movement
   speed: 0.4,
-
-  // Wave distortion amount (0 to 5.0, default: 2.5)
-  // Higher = more organic, flowing movement
   distort: 2.5,
-
-  // Number of rays radiating from center (8 to 64, default: 32)
   rayCount: 32,
-
-  // Blend mode: how the animation mixes with background
-  // 'screen' = lighter, 'lighten' = softer, 'normal' = opaque
   mixBlendMode: "lighten" as const,
-
-  // Color gradient from center to outer edge
-  // Use hex color codes for cosmic/nebula palette
   colors: [
-    "#FF0080", // Vivid magenta
-    "#FF00FF", // Bright magenta/pink
-    "#8B00FF", // Vivid purple
-    "#4169E1", // Royal blue
-    "#00BFFF", // Deep sky blue
-    "#00FFFF", // Cyan
-    "#FFFFFF", // White for brightness
+    "#FF0080",
+    "#FF00FF",
+    "#8B00FF",
+    "#4169E1",
+    "#00BFFF",
+    "#00FFFF",
+    "#FFFFFF",
   ],
-
-  // Mouse interaction dampness (0 to 1, only for 'hover' mode)
-  // Lower = more responsive to mouse movement
   hoverDampness: 0.15,
-
-  // Center offset {x, y} in pixels or percentage
-  // Use to shift the burst origin point
   offset: { x: 0, y: 0 },
-
-  // Pause animation (useful for debugging)
   paused: false,
+};
+
+// Layout configuration for landing page dimensions
+const LAYOUT_CONFIG = {
+  // Landing page section height (viewport height units)
+  // Increase to extend animation visibility before cutoff
+  // 100vh = one full screen, 150vh = 1.5 screens, etc.
+  sectionHeight: "120vh",
+
+  // Animation background height extension
+  // Extends the PrismaticBurst animation beyond the page bounds
+  // Use this to avoid abrupt cutoff when scrolling
+  animationHeight: "120vh", // Can be larger than sectionHeight
+
+  // Whether animation should be fixed or scroll with content
+  // 'absolute' = scrolls naturally with page
+  // 'fixed' = stays in place (not recommended for this use case)
+  animationPosition: "absolute" as const,
+};
+
+// Vignette overlay configuration for smooth transition
+const VIGNETTE_CONFIG = {
+  // Overall opacity of the animation background (0 to 1)
+  // Lower = more transparent, smoother blend with wallpaper
+  backgroundOpacity: 0.8,
+
+  // Radial gradient vignette settings
+  vignette: {
+    // Enable/disable edge fade effect
+    enabled: true,
+
+    // Inner radius where fade starts (0 to 100, percentage from center)
+    // Higher = smaller bright center area
+    innerRadius: 40,
+
+    // Outer radius where fade ends (0 to 100, percentage from center)
+    // Higher = fade extends further from center
+    outerRadius: 60,
+
+    // Edge darkness/transparency (0 to 1)
+    // Higher = darker/more transparent edges
+    edgeOpacity: 0,
+
+    // Center brightness (0 to 1)
+    // Lower = allows wallpaper to show through center
+    centerOpacity: 1,
+  },
 };
 
 export default function LandingPage() {
   const [introComplete, setIntroComplete] = useState(false);
   const [showBackground, setShowBackground] = useState(false);
-  const [logoVisible, setLogoVisible] = useState(false);
-  const [heroVisible, setHeroVisible] = useState(false);
-
-  // Animation plays on every page load/refresh (no persistence)
+  const [showHero, setShowHero] = useState(false);
 
   const handleVideoComplete = () => {
-    console.log("Video completed, showing logo");
     setIntroComplete(true);
     setShowBackground(true);
-    setLogoVisible(true);
+    setShowHero(true);
   };
 
+  // Lock scroll during video playback
   useEffect(() => {
-    if (!logoVisible) return;
+    if (!introComplete) {
+      // Prevent scrolling
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
 
-    const timer = setTimeout(() => {
-      setLogoVisible(false);
-      setHeroVisible(true);
-    }, 2400);
-
-    return () => clearTimeout(timer);
-  }, [logoVisible]);
-
-  useEffect(() => {
-    if (introComplete) {
-      setHeroVisible(true);
+      // Reset scroll position to top
+      window.scrollTo(0, 0);
+    } else {
+      // Re-enable scrolling when video completes
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
+
+    return () => {
+      // Cleanup: ensure scroll is re-enabled
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
   }, [introComplete]);
 
-  // Fallback: if video doesn't load, skip after 1 second
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!introComplete) {
-        console.log("Video timeout, skipping to animation");
         handleVideoComplete();
       }
-    }, 10000); // 10 second timeout
+    }, 10000);
 
     return () => clearTimeout(timeout);
   }, [introComplete]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-black">
-      {/* Big Bang intro video - only show on first visit */}
+    <div
+      className="relative w-full"
+      style={{ minHeight: LAYOUT_CONFIG.sectionHeight }}
+    >
       {!introComplete && (
         <div className="fixed inset-0 z-50 bg-black">
           <video
@@ -118,14 +135,33 @@ export default function LandingPage() {
         </div>
       )}
 
-      {/* Prismatic Burst background */}
       <AnimatePresence>
         {showBackground && (
           <motion.div
-            className="absolute inset-0 z-0 pointer-events-none"
+            className="z-0 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: VIGNETTE_CONFIG.backgroundOpacity }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
+            style={
+              VIGNETTE_CONFIG.vignette.enabled
+                ? {
+                    position: LAYOUT_CONFIG.animationPosition,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: LAYOUT_CONFIG.animationHeight,
+                    maskImage: `radial-gradient(circle at center, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.centerOpacity}) ${VIGNETTE_CONFIG.vignette.innerRadius}%, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.edgeOpacity}) ${VIGNETTE_CONFIG.vignette.outerRadius}%)`,
+                    WebkitMaskImage: `radial-gradient(circle at center, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.centerOpacity}) ${VIGNETTE_CONFIG.vignette.innerRadius}%, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.edgeOpacity}) ${VIGNETTE_CONFIG.vignette.outerRadius}%)`,
+                  }
+                : {
+                    position: LAYOUT_CONFIG.animationPosition,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: LAYOUT_CONFIG.animationHeight,
+                  }
+            }
           >
             <PrismaticBurst
               animationType={ANIMATION_CONFIG.animationType}
@@ -143,54 +179,24 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
-      {heroVisible && (
-        <section className="relative z-10 flex min-h-screen items-center justify-center px-6 py-24">
-          <motion.div
-            className="flex max-w-3xl flex-col items-center gap-6 text-center"
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <Image
-              src="/conflu25White.png"
-              alt="Confluence 2025"
-              width={360}
-              height={180}
-              className="h-auto w-[min(80vw,360px)]"
-              priority
-            />
-
-            <p className="max-w-xl text-lg text-slate-200">
-              Cosmic Carnival returns with a stellar line-up of galactic
-              showcases, immersive installations, and performances that bend the
-              fabric of reality.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm uppercase tracking-[0.3em] text-sky-200/90">
-              <span>3 Days</span>
-              <span className="hidden sm:inline">•</span>
-              <span>20+ Clubs</span>
-              <span className="hidden sm:inline">•</span>
-              <span>Limitless Energy</span>
-            </div>
-          </motion.div>
-        </section>
-      )}
-
-      {/* Logo zoom animation */}
       <AnimatePresence>
-        {logoVisible && (
-          <motion.div
-            className="fixed inset-0 z-10 flex items-center justify-center pointer-events-none"
-            initial={{ scale: 1 }}
-            animate={{ scale: 0.7 }}
+        {showHero && (
+          <motion.section
+            className="relative z-10 flex min-h-screen w-full items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 2, ease: "easeOut", delay: 0.1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <div
-              className="relative w-full max-w-[90vw]"
-              style={{
-                aspectRatio: "1",
+            <motion.div
+              className="relative"
+              style={{ aspectRatio: "3 / 1" }}
+              initial={{ opacity: 0, width: "100vw" }}
+              animate={{ opacity: 1, width: "70vw" }}
+              exit={{ opacity: 0 }}
+              transition={{
+                width: { duration: 2, ease: "easeInOut" },
+                opacity: { duration: 0.6, ease: "easeOut" },
               }}
             >
               <Image
@@ -200,8 +206,8 @@ export default function LandingPage() {
                 className="object-contain"
                 priority
               />
-            </div>
-          </motion.div>
+            </motion.div>
+          </motion.section>
         )}
       </AnimatePresence>
     </div>

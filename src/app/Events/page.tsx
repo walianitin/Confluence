@@ -218,9 +218,7 @@ export default function EventsPage() {
       : allEvents.filter((event) => event.clubName === selectedClub);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 py-24 text-white">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.2),_transparent_55%)]" />
-
+    <main className="relative min-h-screen overflow-hidden py-24 text-white">
       <div className={`${contentContainerClass}`}>
         <motion.h1
           className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl"

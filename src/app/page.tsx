@@ -19,11 +19,6 @@ const SECTION_COMPONENTS = [
 
 type SectionId = (typeof SECTION_COMPONENTS)[number]["id"];
 
-const sectionObserverOptions: IntersectionObserverInit = {
-  threshold: [0.15, 0.35, 0.55],
-  rootMargin: "-20% 0px -20% 0px",
-};
-
 export default function Home() {
   const { setActiveSection } = useActiveSection();
   const sectionRefs = useRef<Record<SectionId, HTMLElement | null>>({
@@ -33,59 +28,89 @@ export default function Home() {
     teams: null,
     sponsors: null,
   });
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isUserScrollingRef = useRef(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      let activeId: SectionId | null = null;
-      let highestRatio = 0;
+    const updateActiveSection = () => {
+      const scrollY = window.scrollY;
 
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting || entry.intersectionRatio <= highestRatio) {
-          return;
-        }
+      // If near the top (first ~80vh), consider it the landing/home page
+      if (scrollY < window.innerHeight * 0.8) {
+        setActiveSection("home");
+        return;
+      }
 
-        if (entry.target instanceof HTMLElement && entry.target.id) {
-          activeId = entry.target.id as SectionId;
-          highestRatio = entry.intersectionRatio;
+      // Use scroll position to determine which section should be active
+      const scrollPosition = scrollY + window.innerHeight / 3; // Check at 1/3 from top
+      let activeId: SectionId = "gallery";
+
+      // Find the section that contains the scroll position
+      (
+        Object.entries(sectionRefs.current) as [SectionId, HTMLElement | null][]
+      ).forEach(([id, element]) => {
+        if (!element) return;
+
+        const rect = element.getBoundingClientRect();
+        const elementTop = scrollY + rect.top;
+        const elementBottom = elementTop + rect.height;
+
+        // If scroll position is within this section
+        if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
+          activeId = id;
         }
       });
 
-      if (activeId) {
-        setActiveSection(activeId);
+      setActiveSection(activeId);
+    };
+
+    // Debounced scroll handler - waits for scroll to settle
+    const handleScroll = () => {
+      isUserScrollingRef.current = true;
+
+      // Clear existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
       }
-    }, sectionObserverOptions);
 
-    const elements = Object.values(sectionRefs.current).filter(
-      (node): node is HTMLElement => Boolean(node)
-    );
+      // Set new timeout - update after scroll settles (150ms of no scrolling)
+      scrollTimeoutRef.current = setTimeout(() => {
+        updateActiveSection();
+        isUserScrollingRef.current = false;
+      }, 150);
+    };
 
-    elements.forEach((element) => observer.observe(element));
+    // Initial update
+    setTimeout(updateActiveSection, 100);
+
+    // Listen to scroll
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      elements.forEach((element) => observer.unobserve(element));
-      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
     };
   }, [setActiveSection]);
 
-  useEffect(() => {
-    setActiveSection("gallery");
-  }, [setActiveSection]);
-
   return (
-    <div className="flex min-h-screen w-full flex-col bg-black text-white">
+    <div className="relative flex min-h-screen w-full flex-col text-white">
+      {/* Fixed background for entire site except during landing video */}
+      <div
+        className="fixed inset-0 -z-10"
+        style={{
+          backgroundImage: 'url("/bg-wallpaper.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
       <LandingPage />
 
       {SECTION_COMPONENTS.map(({ id, Component }, index) => (
         <Fragment key={id}>
-          <div
-            aria-hidden
-            className={`h-24 w-full bg-gradient-to-b ${
-              index === 0
-                ? "from-black via-indigo-950/80 to-transparent"
-                : "from-transparent via-slate-900/70 to-transparent"
-            }`}
-          />
-
           <section
             id={id}
             ref={(node) => {

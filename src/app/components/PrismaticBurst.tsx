@@ -74,7 +74,10 @@ vec3 rayDir(vec2 frag, vec2 res, vec2 offset, float dist){
 
 float edgeFade(vec2 frag, vec2 res, vec2 offset){
     vec2 toC = frag - 0.5 * res - offset;
-    float r = length(toC) / (0.5 * min(res.x, res.y));
+    // HEIGHT CONTROL: Change 0.5 to smaller value (0.35, 0.3, etc.) to extend rays further
+    // Original: 0.5 * min(res.x, res.y) - rays fade at viewport edge
+    // Smaller divisor = rays extend beyond viewport before fading
+    float r = length(toC) / (0.35 * min(res.x, res.y));
     float x = clamp(r, 0.0, 1.0);
     float q = x * x * x * (x * (x * 6.0 - 15.0) + 10.0);
     float s = q * 0.5;
@@ -471,12 +474,7 @@ const PrismaticBurst = ({
     program.uniforms.uColorCount.value = count;
   }, [intensity, speed, animationType, colors, distort, offset, rayCount]);
 
-  return (
-    <div
-      className="w-full h-full relative overflow-hidden"
-      ref={containerRef}
-    />
-  );
+  return <div className="w-full h-full relative" ref={containerRef} />;
 };
 
 export default PrismaticBurst;

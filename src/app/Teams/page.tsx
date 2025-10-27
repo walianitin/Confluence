@@ -94,7 +94,7 @@ export default function TeamSection() {
   );
 
   return (
-    <section className="w-full py-12">
+    <section className="relative w-full py-12">
       <div
         className={`${contentContainerClass} flex flex-col items-center gap-10`}
       >

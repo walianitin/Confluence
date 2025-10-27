@@ -9,6 +9,7 @@ import { glassPanel } from "./glassTokens";
 import { useActiveSection } from "./ActiveSectionContext";
 
 const navLinks = [
+  { name: "Home", id: "home", link: "/" },
   { name: "Gallery", id: "gallery", link: "/Gallery" },
   { name: "Events", id: "events", link: "/Events" },
   { name: "Developers", id: "developers", link: "/Developers" },
@@ -92,6 +93,17 @@ const GlassNavBar: React.FC = () => {
         <Link
           href="/"
           className="flex shrink-0 items-center justify-center px-2 sm:px-3"
+          onClick={(event) => {
+            if (isHome) {
+              event.preventDefault();
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+              setActiveSection("home");
+              updateIndicator("home");
+            }
+          }}
         >
           <Image
             src="/conflu25White.png"
@@ -104,7 +116,7 @@ const GlassNavBar: React.FC = () => {
         </Link>
         <div
           ref={tabsContainerRef}
-          className="tabs-scroll relative flex items-center gap-1.5 overflow-x-auto"
+          className="tabs-scroll relative flex items-center gap-1.5 overflow-x-auto overflow-y-hidden"
           style={{
             minHeight: indicatorReady ? indicator.height : undefined,
             scrollbarWidth: "none",
@@ -118,7 +130,13 @@ const GlassNavBar: React.FC = () => {
                 left: indicator.left,
                 width: indicator.width,
               }}
-              transition={{ type: "spring", stiffness: 320, damping: 28 }}
+              transition={{
+                type: "spring",
+                stiffness: 320,
+                damping: 30,
+                mass: 0.8,
+                restDelta: 0.001,
+              }}
               className="pointer-events-none absolute top-1/2 -z-10 border border-sky-400/40 bg-sky-500/30"
               style={{
                 transform: "translateY(-50%)",
@@ -149,12 +167,21 @@ const GlassNavBar: React.FC = () => {
                 onClick={(event) => {
                   if (isHome) {
                     event.preventDefault();
-                    const section = document.getElementById(link.id);
-                    if (section) {
-                      section.scrollIntoView({
+
+                    // Special handling for Home - scroll to top
+                    if (link.id === "home") {
+                      window.scrollTo({
+                        top: 0,
                         behavior: "smooth",
-                        block: "start",
                       });
+                    } else {
+                      const section = document.getElementById(link.id);
+                      if (section) {
+                        section.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }
                     }
                   }
 

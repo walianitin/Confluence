@@ -57,9 +57,7 @@ const sponsorSections: SponsorSection[] = [
 ];
 
 const pageStyles = {
-  main: "relative isolate overflow-hidden bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 py-24 text-white",
-  aurora:
-    "absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.2),_transparent_55%)]",
+  main: "relative isolate overflow-hidden py-24 text-white",
   container: `${contentContainerClass} flex flex-col gap-16`,
   headerShell: "mx-auto max-w-3xl text-center",
   headerBadge: "text-sm uppercase tracking-[0.35em] text-sky-300/80",
@@ -133,7 +131,6 @@ function SponsorSection({ heading, sponsors }: SponsorSection) {
 export default function Page() {
   return (
     <main className={pageStyles.main}>
-      <div className={pageStyles.aurora} />
       <div className={pageStyles.container}>
         <header className={`${pageStyles.headerShell} mb-12`}>
           <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">

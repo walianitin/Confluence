@@ -16,7 +16,7 @@ export function ActiveSectionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [activeSection, setActiveSection] = useState<string>("gallery");
+  const [activeSection, setActiveSection] = useState<string>("home");
 
   const value = useMemo(
     () => ({

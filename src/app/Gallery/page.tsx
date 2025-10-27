@@ -1,17 +1,7 @@
 "use client";
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import Card from "../components/GalleryCard";
 import { contentContainerClass } from "../components/layoutTokens";
-
-const backgroundStyle: CSSProperties = {
-  backgroundImage: 'url("/Evente_bg.svg")',
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  width: "100%",
-  minHeight: "100vh",
-  opacity: 0.8,
-};
 
 const data = [
   {
@@ -68,10 +58,7 @@ export default function Gallery() {
   };
 
   return (
-    <div
-      className="flex min-h-screen w-full items-center justify-center"
-      style={backgroundStyle}
-    >
+    <div className="flex min-h-screen w-full items-center justify-center">
       <div
         className={`${contentContainerClass} flex flex-col items-center justify-center gap-6`}
       >
