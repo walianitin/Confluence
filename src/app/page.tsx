@@ -22,8 +22,8 @@ export default function Home() {
     <div className="relative flex min-h-screen w-full max-w-[100vw] flex-col overflow-x-hidden text-white">
       {/* Fixed background wallpaper */}
       <FixedBackground
-        imageUrl="/bg-wallpaper.svg"
-        mobileImageUrl="/bg-wallpaper-vertical.svg"
+        imageUrl="/bg-wallpaper.jpg"
+        mobileImageUrl="/bg-wallpaper-vertical.jpg"
         alt="Confluence background"
       />
 
