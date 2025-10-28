@@ -3,114 +3,162 @@
 import { type CSSProperties, useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import PrismaticBurst from "../components/PrismaticBurst";
+import Galaxy from "../components/Galaxy";
 
-const ANIMATION_CONFIG = {
-  animationType: "rotate3d" as const,
-  intensity: 4.5,
-  speed: 0.4,
-  distort: 0,
-  rayCount: 30,
-  mixBlendMode: "lighten" as const,
-  colors: ["#ff0000ff", "#ffdd00ff", "#8B00FF"],
-  hoverDampness: 0.15,
-  offset: { x: 0, y: 0 },
-  paused: false,
+// ===== GALAXY ANIMATION CONFIGURATION =====
+// Adjust these values to customize the galaxy background animation
+const GALAXY_CONFIG = {
+  // Star movement speed (0 = static, higher = faster)
+  starSpeed: 0.5,
+
+  // Star density (0.5 = sparse, 2 = dense)
+  density: 1.5,
+
+  // Color hue shift in degrees (0-360)
+  // 0 = red, 120 = green, 240 = blue, 140 = cyan-ish
+  hueShift: 180,
+
+  // Animation speed multiplier
+  speed: 0.2,
+
+  // Star glow intensity (0 = no glow, 1 = maximum glow)
+  glowIntensity: 0.6,
+
+  // Color saturation (0 = grayscale, 1 = full color)
+  saturation: 0.8,
+
+  // Enable mouse repulsion effect (stars push away from cursor)
+  mouseRepulsion: false,
+
+  // Mouse interaction enabled
+  mouseInteraction: true,
+
+  // Star twinkle intensity (0 = no twinkle, 1 = maximum)
+  twinkleIntensity: 0.3,
+
+  // Galaxy rotation speed (0 = no rotation)
+  rotationSpeed: 0,
+
+  // Repulsion strength when mouseRepulsion is true
+  repulsionStrength: 2,
+
+  // Auto center repulsion (0 = disabled, pushes stars from center)
+  autoCenterRepulsion: 0,
+
+  // Transparent background (allows wallpaper to show through)
+  transparent: true,
+
+  // === FADE EFFECT CONFIGURATION ===
+  // Bottom fade for smooth transition
+  fade: {
+    // Enable bottom fade effect
+    enabled: true,
+
+    // Fade start position from bottom (in vh or %)
+    // 0 = starts at very bottom, 20 = starts 20vh from bottom
+    startPosition: "20vh",
+
+    // Fade intensity (0 = no fade, 1 = full fade to transparent)
+    intensity: 1,
+
+    // Fade type: "linear" | "easeIn" | "easeOut" | "smooth"
+    type: "easeOut" as const,
+  },
 };
 
 // Layout configuration for landing page dimensions
 const LAYOUT_CONFIG = {
   // Landing page section height (viewport height units)
-  // Increase to extend animation visibility before cutoff
-  // 100vh = one full screen, 150vh = 1.5 screens, etc.
-  sectionHeight: "120vh",
+  sectionHeight: "100vh",
 
-  // Animation background height extension
-  // Extends the PrismaticBurst animation beyond the page bounds
-  // Use this to avoid abrupt cutoff when scrolling
-  animationHeight: "160vh", // Can be larger than sectionHeight
+  // Animation background height (covers full landing page)
+  animationHeight: "100vh",
 
-  // Width multiplier to keep burst visible on tall portrait breakpoints
-  // Clipped to viewport width to prevent horizontal scroll
-  animationWidth: "min(100vw, max(100vw, 140vh))",
+  // Animation width
+  animationWidth: "100vw",
 
-  // Whether animation should be fixed or scroll with content
-  // 'absolute' = scrolls naturally with page
-  // 'fixed' = stays in place (not recommended for this use case)
-  animationPosition: "absolute" as const,
-};
+  // Animation position type
+  animationPosition: "fixed" as const,
 
-// Vignette overlay configuration for smooth transition
-const VIGNETTE_CONFIG = {
-  // Overall opacity of the animation background (0 to 1)
-  // Lower = more transparent, smoother blend with wallpaper
-  backgroundOpacity: 0.9,
-
-  // Radial gradient vignette settings
-  vignette: {
-    // Enable/disable edge fade effect
+  // === BACKGROUND IMAGE CONFIGURATION ===
+  // Background image that appears after stars
+  backgroundImage: {
+    // Enable background image layer
     enabled: true,
 
-    // Inner radius where fade starts (0 to 100, percentage from center)
-    // Higher = smaller bright center area
-    innerRadius: 40,
+    // Path to background image (relative to public folder)
+    // Set to empty string "" to disable background image
+    url: "",
 
-    // Outer radius where fade ends (0 to 100, percentage from center)
-    // Higher = fade extends further from center
-    outerRadius: 50,
+    // Background image opacity (0 = invisible, 1 = fully visible)
+    opacity: 0.3,
 
-    // Edge darkness/transparency (0 to 1)
-    // Higher = darker/more transparent edges
-    edgeOpacity: 0,
+    // Background size: "cover" | "contain" | "auto"
+    size: "cover" as const,
 
-    // Center brightness (0 to 1)
-    // Lower = allows wallpaper to show through center
-    centerOpacity: 1,
+    // Background position
+    position: "center" as const,
   },
 };
 
 // ===== FINE-TUNING CONFIGURATION =====
 // Adjust these values to customize the intro animation timing and appearance
 const INTRO_ANIMATION_CONFIG = {
-  // === TIMING ===
+  // === ANIMATION SEQUENCE TIMING ===
+  // After video completes, elements appear in this order:
+  // 1. Stars fade in from 0 to full brightness
+  // 2. Background image appears
+  // 3. Logo holds at full size
+  // 4. Logo shrinks to final size
+
+  // Delay before stars start appearing after video ends (milliseconds)
+  starsDelay: 0,
+
+  // Duration of stars fade-in animation (milliseconds)
+  starsFadeDuration: 1500,
+
+  // Delay before background appears after stars start (milliseconds)
+  backgroundDelay: 500,
+
+  // Duration of background fade-in animation (milliseconds)
+  backgroundFadeDuration: 1000,
+
   // Duration logo stays at full width before shrinking (milliseconds)
-  logoHoldDuration: 50, // 2 seconds
+  logoHoldDuration: 0,
 
   // Duration of logo shrinking animation (milliseconds)
-  logoShrinkDuration: 50, // 2 seconds
+  logoShrinkDuration: 2000,
 
   // Fallback timeout if video doesn't play (milliseconds)
   videoTimeout: 15000, // 15 seconds
 
   // === LOGO SIZES ===
   // Initial logo width (full screen)
-  logoInitialWidth: "150vw",
+  logoInitialWidth: "120vw",
 
   // Final logo width on MOBILE (after shrinking)
-  logoFinalWidthMobile: "80vw", // 80% of viewport width
+  logoFinalWidthMobile: "90vw", // 80% of viewport width
 
   // Final logo width on DESKTOP (after shrinking)
-  logoFinalWidthDesktop: "70vw", // 70% of viewport width
-
-  // Intermediate keyframe during shrink (for smoother animation)
-  // Mobile: goes 100vw → this → logoFinalWidthMobile
-  logoMidWidthMobile: "90vw",
-
-  // Desktop: goes 100vw → this → logoFinalWidthDesktop
-  logoMidWidthDesktop: "80vw",
+  logoFinalWidthDesktop: "60vw", // 70% of viewport width
 
   // === ANIMATION EFFECTS ===
   // Animation easing curve for logo shrink
   // Options: "linear", "easeIn", "easeOut", "easeInOut", "circIn", "circOut",
   // "circInOut", "backIn", "backOut", "backInOut", "anticipate"
-  shrinkEasing: "backOut" as const, // Subtle bounce/overshoot effect
+  /* easeOut – quick start, smooth settle, no overshoot.
+easeInOut – gentle acceleration and deceleration.
+easeIn – slow start, speeds up toward the end.
+linear – constant speed (can feel robotic).
+circOut – similar to easeOut but slightly softer.
+anticipate / backOut / backInOut – add a bounce; avoid if you don’t want it. */
+  shrinkEasing: "easeOut" as const, // Subtle bounce/overshoot effect
 
   // Scale animation during shrink (1 = no scale)
   // Creates zoom effect independent of width change
   scaleAnimation: {
-    enabled: true,
+    enabled: false,
     initial: 1,
-    mid: 1.05, // Slight grow before shrink
     final: 1,
   },
 
@@ -136,6 +184,7 @@ export default function LandingPage() {
   const [videoComplete, setVideoComplete] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
   const [logoShrinking, setLogoShrinking] = useState(false);
+  const [showStars, setShowStars] = useState(false);
   const [showBackground, setShowBackground] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -149,26 +198,77 @@ export default function LandingPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Force scroll to top on mount and prevent scroll restoration
+  useEffect(() => {
+    // Disable browser scroll restoration
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    // Force immediate scroll to top
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
+  // Generate fade gradient based on configuration
+  const getFadeGradient = () => {
+    if (!GALAXY_CONFIG.fade.enabled) return "none";
+
+    const startPos = GALAXY_CONFIG.fade.startPosition;
+    const type = GALAXY_CONFIG.fade.type;
+
+    // Different gradient types for fade effect
+    const gradients = {
+      linear: `linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - ${startPos}), rgba(0,0,0,0) 100%)`,
+      easeIn: `linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - ${startPos}), rgba(0,0,0,0.5) calc(100% - calc(${startPos} / 2)), rgba(0,0,0,0) 100%)`,
+      easeOut: `linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - ${startPos}), rgba(0,0,0,0.3) calc(100% - calc(${startPos} * 0.7)), rgba(0,0,0,0) 100%)`,
+      smooth: `linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - ${startPos}), rgba(0,0,0,0.8) calc(100% - calc(${startPos} * 0.8)), rgba(0,0,0,0.5) calc(100% - calc(${startPos} * 0.5)), rgba(0,0,0,0.2) calc(100% - calc(${startPos} * 0.3)), rgba(0,0,0,0) 100%)`,
+    };
+
+    return gradients[type] || gradients.easeOut;
+  };
+
   const baseBackgroundStyle: CSSProperties = {
     position: LAYOUT_CONFIG.animationPosition,
-    top: "50%",
-    left: "50%",
+    top: 0,
+    left: 0,
     height: LAYOUT_CONFIG.animationHeight,
     width: LAYOUT_CONFIG.animationWidth,
-    transform: "translate(-50%, -50%)",
     overflow: "hidden",
+    ...(GALAXY_CONFIG.fade.enabled && {
+      maskImage: getFadeGradient(),
+      WebkitMaskImage: getFadeGradient(),
+    }),
   };
 
   const handleVideoComplete = () => {
     setVideoComplete(true);
-    // Show logo immediately after video ends
-    setShowLogo(true);
 
-    // After configured hold duration, start shrinking logo and show animation
+    // Sequence 1: Show stars after configured delay
     setTimeout(() => {
-      setLogoShrinking(true);
+      setShowStars(true);
+    }, INTRO_ANIMATION_CONFIG.starsDelay);
+
+    // Sequence 2: Show background after stars start + delay
+    setTimeout(() => {
       setShowBackground(true);
-    }, INTRO_ANIMATION_CONFIG.logoHoldDuration);
+    }, INTRO_ANIMATION_CONFIG.starsDelay + INTRO_ANIMATION_CONFIG.backgroundDelay);
+
+    // Sequence 3: Show logo at full size (appears with or after background)
+    setTimeout(() => {
+      setShowLogo(true);
+    }, INTRO_ANIMATION_CONFIG.starsDelay + INTRO_ANIMATION_CONFIG.backgroundDelay);
+
+    // Sequence 4: Start shrinking logo after hold duration
+    setTimeout(
+      () => {
+        setLogoShrinking(true);
+      },
+      INTRO_ANIMATION_CONFIG.starsDelay +
+        INTRO_ANIMATION_CONFIG.backgroundDelay +
+        INTRO_ANIMATION_CONFIG.logoHoldDuration
+    );
   };
 
   // Lock scroll until logo finishes shrinking
@@ -178,19 +278,21 @@ export default function LandingPage() {
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
 
-      // Reset scroll position to top
-      window.scrollTo(0, 0);
+      // Continuously reset scroll position to top during animation
+      const scrollInterval = setInterval(() => {
+        if (window.scrollY !== 0) {
+          window.scrollTo(0, 0);
+        }
+      }, 16); // Check every frame (~60fps)
+
+      return () => {
+        clearInterval(scrollInterval);
+      };
     } else {
       // Re-enable scrolling when logo starts shrinking
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     }
-
-    return () => {
-      // Cleanup: ensure scroll is re-enabled
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    };
   }, [videoComplete, logoShrinking]);
 
   // Fallback timeout in case video doesn't load/play
@@ -209,47 +311,70 @@ export default function LandingPage() {
       className="relative w-full max-w-[100vw] overflow-x-hidden overflow-y-hidden"
       style={{ minHeight: LAYOUT_CONFIG.sectionHeight }}
     >
-      {/* Container for centering both animation and logo */}
+      {/* Fixed galaxy stars animation with custom fade-in */}
+      <AnimatePresence>
+        {showStars && (
+          <motion.div
+            className="fixed top-0 left-0 z-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: INTRO_ANIMATION_CONFIG.starsFadeDuration / 1000,
+              ease: "easeOut",
+            }}
+            style={baseBackgroundStyle}
+          >
+            <Galaxy
+              starSpeed={GALAXY_CONFIG.starSpeed}
+              density={GALAXY_CONFIG.density}
+              hueShift={GALAXY_CONFIG.hueShift}
+              speed={GALAXY_CONFIG.speed}
+              glowIntensity={GALAXY_CONFIG.glowIntensity}
+              saturation={GALAXY_CONFIG.saturation}
+              mouseRepulsion={GALAXY_CONFIG.mouseRepulsion}
+              mouseInteraction={GALAXY_CONFIG.mouseInteraction}
+              twinkleIntensity={GALAXY_CONFIG.twinkleIntensity}
+              rotationSpeed={GALAXY_CONFIG.rotationSpeed}
+              repulsionStrength={GALAXY_CONFIG.repulsionStrength}
+              autoCenterRepulsion={GALAXY_CONFIG.autoCenterRepulsion}
+              transparent={GALAXY_CONFIG.transparent}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Background image layer (appears after stars) */}
+      <AnimatePresence>
+        {showBackground &&
+          LAYOUT_CONFIG.backgroundImage.enabled &&
+          LAYOUT_CONFIG.backgroundImage.url && (
+            <motion.div
+              className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: LAYOUT_CONFIG.backgroundImage.opacity }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: INTRO_ANIMATION_CONFIG.backgroundFadeDuration / 1000,
+                ease: "easeOut",
+              }}
+              style={{
+                backgroundImage: `url("${LAYOUT_CONFIG.backgroundImage.url}")`,
+                backgroundSize: LAYOUT_CONFIG.backgroundImage.size,
+                backgroundPosition: LAYOUT_CONFIG.backgroundImage.position,
+                backgroundRepeat: "no-repeat",
+              }}
+            />
+          )}
+      </AnimatePresence>
+
+      {/* Container for centering logo */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
         style={{
           transform: `translateY(${INTRO_ANIMATION_CONFIG.verticalOffset})`,
         }}
       >
-        <AnimatePresence>
-          {showBackground && (
-            <motion.div
-              className="absolute inset-0 z-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: VIGNETTE_CONFIG.backgroundOpacity }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={
-                VIGNETTE_CONFIG.vignette.enabled
-                  ? {
-                      ...baseBackgroundStyle,
-                      maskImage: `radial-gradient(circle at center, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.centerOpacity}) ${VIGNETTE_CONFIG.vignette.innerRadius}%, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.edgeOpacity}) ${VIGNETTE_CONFIG.vignette.outerRadius}%)`,
-                      WebkitMaskImage: `radial-gradient(circle at center, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.centerOpacity}) ${VIGNETTE_CONFIG.vignette.innerRadius}%, rgba(0,0,0,${VIGNETTE_CONFIG.vignette.edgeOpacity}) ${VIGNETTE_CONFIG.vignette.outerRadius}%)`,
-                    }
-                  : baseBackgroundStyle
-              }
-            >
-              <PrismaticBurst
-                animationType={ANIMATION_CONFIG.animationType}
-                intensity={ANIMATION_CONFIG.intensity}
-                speed={ANIMATION_CONFIG.speed}
-                distort={ANIMATION_CONFIG.distort}
-                paused={ANIMATION_CONFIG.paused}
-                offset={ANIMATION_CONFIG.offset}
-                hoverDampness={ANIMATION_CONFIG.hoverDampness}
-                rayCount={ANIMATION_CONFIG.rayCount}
-                mixBlendMode={ANIMATION_CONFIG.mixBlendMode}
-                colors={ANIMATION_CONFIG.colors}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <AnimatePresence>
           {showLogo && (
             <motion.div
@@ -279,34 +404,18 @@ export default function LandingPage() {
                 animate={{
                   width: logoShrinking
                     ? isMobile
-                      ? [
-                          INTRO_ANIMATION_CONFIG.logoInitialWidth,
-                          INTRO_ANIMATION_CONFIG.logoMidWidthMobile,
-                          INTRO_ANIMATION_CONFIG.logoFinalWidthMobile,
-                        ]
-                      : [
-                          INTRO_ANIMATION_CONFIG.logoInitialWidth,
-                          INTRO_ANIMATION_CONFIG.logoMidWidthDesktop,
-                          INTRO_ANIMATION_CONFIG.logoFinalWidthDesktop,
-                        ]
+                      ? INTRO_ANIMATION_CONFIG.logoFinalWidthMobile
+                      : INTRO_ANIMATION_CONFIG.logoFinalWidthDesktop
                     : INTRO_ANIMATION_CONFIG.logoInitialWidth,
                   scale:
                     logoShrinking &&
                     INTRO_ANIMATION_CONFIG.scaleAnimation.enabled
-                      ? [
-                          INTRO_ANIMATION_CONFIG.scaleAnimation.initial,
-                          INTRO_ANIMATION_CONFIG.scaleAnimation.mid,
-                          INTRO_ANIMATION_CONFIG.scaleAnimation.final,
-                        ]
+                      ? INTRO_ANIMATION_CONFIG.scaleAnimation.final
                       : INTRO_ANIMATION_CONFIG.scaleAnimation.initial,
                   rotate:
                     logoShrinking &&
                     INTRO_ANIMATION_CONFIG.rotationAnimation.enabled
-                      ? [
-                          0,
-                          INTRO_ANIMATION_CONFIG.rotationAnimation.degrees / 2,
-                          INTRO_ANIMATION_CONFIG.rotationAnimation.degrees,
-                        ]
+                      ? INTRO_ANIMATION_CONFIG.rotationAnimation.degrees
                       : 0,
                 }}
                 transition={{
@@ -314,7 +423,6 @@ export default function LandingPage() {
                     ? INTRO_ANIMATION_CONFIG.logoShrinkDuration / 1000
                     : 0,
                   ease: INTRO_ANIMATION_CONFIG.shrinkEasing,
-                  times: logoShrinking ? [0, 0.6, 1] : undefined,
                 }}
               >
                 <Image

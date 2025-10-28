@@ -6,7 +6,5 @@ export const cardOuterRadiusClass = "rounded-[24px]";
 export const cardInnerRadiusClass = "rounded-[16px]";
 export const cardPaddingClass = "p-2";
 
-export const cardSurfaceClasses =
-  "border border-white/12 shadow-xl backdrop-blur-xl";
-
-export const cardGlassBackground = "bg-white/5";
+// Import glassmorphism settings from centralized config
+export { cardSurfaceClasses, cardGlassBackground } from "./glassmorphismConfig";

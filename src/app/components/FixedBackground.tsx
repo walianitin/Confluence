@@ -13,6 +13,7 @@ interface FixedBackgroundProps {
   saturate?: number; // 0 to 2 (default: 1)
   rotateOnMobile?: boolean;
   mobileBreakpoint?: number; // px breakpoint for mobile rotation (default: 768)
+  fallbackColor?: string; // solid color shown behind image/animation
 }
 
 /**
@@ -30,6 +31,7 @@ export default function FixedBackground({
   saturate = 1,
   rotateOnMobile = false,
   mobileBreakpoint = 768,
+  fallbackColor = "transparent",
 }: FixedBackgroundProps) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -94,6 +96,7 @@ export default function FixedBackground({
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        backgroundColor: fallbackColor,
         opacity,
         filter: filterStyles || undefined,
         transform,
