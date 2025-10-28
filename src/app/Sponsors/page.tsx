@@ -57,15 +57,15 @@ const sponsorSections: SponsorSection[] = [
 ];
 
 const pageStyles = {
-  main: "relative isolate max-w-[100vw] overflow-hidden py-16 text-white sm:py-20 lg:py-24",
-  container: `${contentContainerClass} flex flex-col gap-12 sm:gap-16`,
+  main: "relative isolate max-w-[100vw] overflow-hidden text-white",
+  container: `${contentContainerClass} section-content flex flex-col`,
   headerShell: "mx-auto max-w-3xl text-center",
   headerBadge: "text-xs uppercase tracking-[0.35em] text-sky-300/80 sm:text-sm",
   headerTitle:
     "mt-3 text-3xl font-semibold leading-tight sm:mt-4 sm:text-4xl lg:text-5xl",
   headerCopy: "mt-3 text-sm text-slate-300 sm:mt-4 sm:text-base",
-  sections: "flex flex-col gap-10 sm:gap-14",
-  sectionCluster: "space-y-4 sm:space-y-6",
+  sections: "flex flex-col sponsor-subsections",
+  sectionCluster: "sponsor-subsection-inner",
   sectionHeadingWrap:
     "mx-auto flex w-full max-w-xl items-center justify-center gap-3",
   sectionHeadingText:
@@ -133,7 +133,7 @@ export default function Page() {
   return (
     <main className={pageStyles.main}>
       <div className={pageStyles.container}>
-        <header className={`${pageStyles.headerShell} mb-8 sm:mb-12`}>
+        <header className={`${pageStyles.headerShell}`}>
           <h1 className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             SPONSORS
           </h1>

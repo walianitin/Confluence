@@ -257,11 +257,11 @@ export default function EventsPage() {
   return (
     <main
       ref={sectionRef}
-      className="relative min-h-screen max-w-[100vw] overflow-hidden py-16 text-white sm:py-20 lg:py-24"
+      className="relative max-w-[100vw] overflow-hidden text-white"
     >
-      <div className={`${contentContainerClass}`}>
+      <div className={`${contentContainerClass} section-content`}>
         <motion.h1
-          className="mb-8 text-center text-3xl font-bold tracking-tight text-white sm:mb-12 sm:text-5xl lg:text-6xl"
+          className="section-heading text-center text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -269,7 +269,7 @@ export default function EventsPage() {
           EVENTS
         </motion.h1>
 
-        <div className="mb-8 flex justify-center">
+        <div className="flex justify-center">
           <AnimatedDropdown
             items={dropdownItems}
             selectedId={selectedClub}

@@ -1,6 +1,64 @@
 @import "tailwindcss";
 
+/* ====================================
+   FONT CONFIGURATION
+   Easy font switching - just change the font names below
+   ==================================== */
 :root {
+  /* === AVAILABLE FONTS === */
+  /* Uncomment/comment to switch fonts for each element type */
+  
+  /* Navbar Font Options: Gothvetica, InterTight, GoodTimes, Roboto-Regular, AnekLatin-Regular, Inter-Regular, Dune-Rise */
+  --font-navbar: 'Gothvetica';
+  
+  /* Heading Font Options: Gothvetica, InterTight, GoodTimes, Roboto-Regular, AnekLatin-Regular, Inter-Regular, Dune-Rise */
+  --font-heading: 'Walkway UltraBold';
+  
+  /* Body/Paragraph Font Options: Gothvetica, InterTight, GoodTimes, Roboto-Regular, AnekLatin-Regular, Inter-Regular, Dune-Rise */
+  --font-body: 'AnekLatin-Regular';
+  
+  /* Button Font Options: Gothvetica, InterTight, GoodTimes, Roboto-Regular, AnekLatin-Regular, Inter-Regular, Dune-Rise */
+  --font-button: 'Gothvetica';
+
+  /* === LETTER SPACING (Character Spacing) === */
+  /* Values: normal, or use px/em (e.g., 0.5px, 0.05em, 2px) */
+  /* Positive = more space, Negative = less space */
+  --letter-spacing-navbar: normal;
+  --letter-spacing-heading: 3.0px;
+  --letter-spacing-body: normal;
+  --letter-spacing-button: 0.5px;
+
+  /* === SECTION SPACING CONFIGURATION === */
+  /* Control spacing between sections and their content */
+  
+  /* Space between section heading and its content below */
+  --section-heading-to-content: 1rem;        /* Desktop (lg+) */
+  --section-heading-to-content-mobile: 1.5rem; /* Mobile */
+  
+  /* Space between end of section content and next section heading */
+  --section-gap: 1rem;                       /* Desktop (lg+) */
+  --section-gap-mobile: 2.5rem;              /* Mobile */
+  
+  /* Additional padding inside sections (top/bottom) */
+  --section-padding-y: 2rem;                 /* Desktop (lg+) */
+  --section-padding-y-mobile: 2rem;          /* Mobile */
+
+  /* Subsection spacing (e.g., Sponsors categories) */
+  --subsection-gap: 0rem;                  /* Desktop (lg+) */
+  --subsection-gap-mobile: 2rem;             /* Mobile */
+  
+  --subsection-inner-gap: 2rem;            /* Desktop (lg+) */
+  --subsection-inner-gap-mobile: 1rem;       /* Mobile */
+
+  /* Glassmorphism Scrollbar Configuration */
+  --scrollbar-width: 30px;
+  --scrollbar-track-bg: rgba(255, 255, 255, 0.05);
+  --scrollbar-track-border: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-bg: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.3);
+  --scrollbar-thumb-border: rgba(255, 255, 255, 0.3);
+  --scrollbar-blur: 10px;
+
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -10,16 +68,20 @@
   --color-foreground: var(--foreground);
   
   /* Local fonts for Tailwind */
-  --font-family-navbar: 'Gothvetica', ui-sans-serif, system-ui, sans-serif;
-  --font-family-heading: 'Roboto-Regular', ui-sans-serif, system-ui, sans-serif;
-  --font-family-body: 'AnekLatin-Regular', ui-sans-serif, system-ui, sans-serif;
+  --font-family-navbar: var(--font-navbar), ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  --font-family-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-family-button: var(--font-button), ui-sans-serif, system-ui, sans-serif;
   
   /* Override Tailwind's default sans font */
   --font-sans: var(--font-family-body);
   --font-mono: var(--font-geist-mono);
 }
 
-/* Your local fonts — auto-loaded from /fonts/ folder */
+/* ====================================
+   FONT FACE DECLARATIONS
+   All available fonts loaded from /public/fonts/
+   ==================================== */
 @font-face {
   font-family: 'Gothvetica';
   src: url('/fonts/Gothvetica.ttf') format('truetype');
@@ -27,35 +89,26 @@
 }
 
 @font-face {
-  font-family: 'InterTight';
-  src: url('/fonts/InterTight-Regular.ttf') format('truetype');
+  font-family: 'Walkway UltraBold';
+  src: url('/fonts/Gothvetica.ttf') format('truetype');
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'GoodTimes';
-  src: url('/fonts/GoodTimes.ttf') format('truetype');
+  font-family: 'Walkway SemiBold';
+  src: url('/fonts/Walkway SemiBold.ttf') format('truetype');
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'AnekLatin-Regular';
-  src: url('/fonts/AnekLatin-Regular.ttf') format('truetype');
+  font-family: 'Walkway UltraBold';
+  src: url('/fonts/Walkway UltraBold.ttf') format('truetype');
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Inter-Regular';
-  src: url('/fonts/Inter-Regular.ttf') format('truetype');
-  font-display: swap;
-}
+
 
 /* Control fonts for different elements here */
-:root {
-  --font-navbar: var(--font-family-navbar);
-  --font-heading: var(--font-family-heading);
-  --font-body: var(--font-family-body);
-}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -83,9 +136,159 @@ html {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading) !important;
+  letter-spacing: var(--letter-spacing-heading) !important;
 }
 
 nav, [role="navigation"] {
   font-family: var(--font-navbar) !important;
+  letter-spacing: var(--letter-spacing-navbar) !important;
 }
 
+button, .btn {
+  font-family: var(--font-button) !important;
+  letter-spacing: var(--letter-spacing-button) !important;
+}
+
+body {
+  letter-spacing: var(--letter-spacing-body) !important;
+}
+
+/* ====================================
+   GLASSMORPHISM SCROLLBAR STYLING
+   Custom scrollbar with frosted glass effect
+   ==================================== */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+  border: 1px solid var(--scrollbar-track-border);
+  border-radius: 10px;
+  backdrop-filter: blur(var(--scrollbar-blur));
+  -webkit-backdrop-filter: blur(var(--scrollbar-blur));
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border: 1px solid var(--scrollbar-thumb-border);
+  border-radius: 10px;
+  backdrop-filter: blur(var(--scrollbar-blur));
+  -webkit-backdrop-filter: blur(var(--scrollbar-blur));
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-bg);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ====================================
+   SECTION SPACING UTILITIES
+   Apply these classes to your sections
+   ==================================== */
+
+/* Apply to section containers */
+.section-spacing {
+  padding-top: var(--section-padding-y-mobile);
+  padding-bottom: var(--section-padding-y-mobile);
+  margin-bottom: var(--section-gap-mobile);
+}
+
+@media (min-width: 1024px) {
+  .section-spacing {
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+    margin-bottom: var(--section-gap);
+  }
+}
+
+/* Apply to section headings (h1, h2 at start of sections) */
+.section-heading {
+  margin-bottom: var(--section-heading-to-content-mobile);
+}
+
+@media (min-width: 1024px) {
+  .section-heading {
+    margin-bottom: var(--section-heading-to-content);
+  }
+}
+
+/* Auto-apply to common section patterns */
+section {
+  margin: 0; /* Reset browser default 40px margin */
+  padding: 0; /* Reset default padding */
+  padding-top: var(--section-padding-y-mobile);
+  padding-bottom: var(--section-padding-y-mobile);
+  margin-bottom: var(--section-gap-mobile);
+}
+
+@media (min-width: 1024px) {
+  section {
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+    margin-bottom: var(--section-gap);
+  }
+}
+
+/* Section headings inside sections */
+section > h1,
+section > h2,
+section > .section-title {
+  margin-bottom: var(--section-heading-to-content-mobile);
+}
+
+@media (min-width: 1024px) {
+  section > h1,
+  section > h2,
+  section > .section-title {
+    margin-bottom: var(--section-heading-to-content);
+  }
+}
+
+/* Consistent spacing for section content items */
+.section-content > * + * {
+  margin-top: 2rem; /* Space between dropdown, grids, pagination */
+}
+
+@media (min-width: 640px) {
+  .section-content > * + * {
+    margin-top: 2.5rem;
+  }
+}
+
+/* Subsection spacing for grouped content (e.g., Sponsors) */
+.sponsor-subsections > * + * {
+  margin-top: var(--subsection-gap-mobile);
+}
+
+@media (min-width: 640px) {
+  .sponsor-subsections > * + * {
+    margin-top: var(--subsection-gap);
+  }
+}
+
+.sponsor-subsection-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--subsection-inner-gap-mobile);
+}
+
+@media (min-width: 640px) {
+  .sponsor-subsection-inner {
+    gap: var(--subsection-inner-gap);
+  }
+}

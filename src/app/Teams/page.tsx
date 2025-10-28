@@ -89,7 +89,7 @@ const teams = {
 export default function TeamSection() {
   const [selectedClub, setSelectedClub] =
     useState<keyof typeof teams>("Photog");
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const teamOptions = useMemo(
     () => Object.keys(teams).map((club) => ({ id: club, label: club })),
@@ -107,14 +107,14 @@ export default function TeamSection() {
   } = usePagination(currentTeamMembers, { mobile: 5, desktop: 9 });
 
   return (
-    <section
+    <div
       ref={sectionRef}
-      className="relative w-full max-w-[100vw] overflow-x-hidden py-12 sm:py-16 lg:py-20"
+      className="relative w-full max-w-[100vw] overflow-x-hidden"
     >
       <div
-        className={`${contentContainerClass} flex flex-col items-center gap-8 sm:gap-10`}
+        className={`${contentContainerClass} section-content flex flex-col items-center`}
       >
-        <h1 className="mb-8 text-center text-3xl font-bold tracking-tight text-white sm:mb-12 sm:text-5xl lg:text-6xl">
+        <h1 className="section-heading text-center text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
           TEAMS
         </h1>
 
@@ -152,6 +152,6 @@ export default function TeamSection() {
           className="mt-8"
         />
       </div>
-    </section>
+    </div>
   );
 }

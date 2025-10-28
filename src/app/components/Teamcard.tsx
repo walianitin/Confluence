@@ -44,11 +44,11 @@ const teamMembers = [
 
 export default function TeamSection() {
   return (
-    <section className="relative max-w-[100vw] overflow-x-hidden py-16 text-gray-200 sm:py-20 lg:py-24">
+    <div className="relative max-w-[100vw] overflow-x-hidden text-gray-200">
       <div
-        className={`${contentContainerClass} flex flex-col items-center gap-10 text-center sm:gap-12`}
+        className={`${contentContainerClass} section-content flex flex-col items-center text-center`}
       >
-        <h1 className="mb-8 text-3xl font-bold tracking-tight sm:mb-12 sm:text-5xl lg:text-6xl">
+        <h1 className="section-heading text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           DEVELOPERS
         </h1>
 
@@ -82,6 +82,6 @@ export default function TeamSection() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

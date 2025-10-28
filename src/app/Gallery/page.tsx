@@ -105,12 +105,12 @@ export default function Gallery() {
   return (
     <div
       ref={sectionRef}
-      className="flex min-h-screen w-full max-w-[100vw] items-center justify-center overflow-x-hidden py-16 sm:py-20 lg:py-24"
+      className="flex w-full max-w-[100vw] items-center justify-center overflow-x-hidden"
     >
       <div
-        className={`${contentContainerClass} flex flex-col items-center justify-center gap-6`}
+        className={`${contentContainerClass} section-content flex flex-col items-center justify-center`}
       >
-        <h1 className="mb-8 text-center text-3xl font-bold tracking-tight text-white sm:mb-12 sm:text-5xl lg:text-6xl">
+        <h1 className="section-heading text-center text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
           GALLERY
         </h1>
 
