@@ -52,6 +52,33 @@
   --subsection-inner-gap: 2rem;                 /* Desktop */
   --subsection-inner-gap-mobile: 1rem;          /* Mobile */
 
+  /* === PAGINATION CONFIGURATION === */
+  /* Controls when pagination appears and how many items per page */
+  
+  /* Minimum items needed before pagination appears */
+  --pagination-threshold: 3;  /* Show pagination only if items > this value */
+  
+  /* Items per page for different sections */
+  /* Events Section */
+  --pagination-events-mobile: 3;
+  --pagination-events-desktop: 9;
+  
+  /* Teams Section */
+  --pagination-teams-mobile: 4;
+  --pagination-teams-desktop: 9;
+  
+  /* Gallery Section (carousel style - 1 item per page) */
+  --pagination-gallery-mobile: 1;
+  --pagination-gallery-desktop: 1;
+  
+  /* Developers Section (if pagination is added later) */
+  --pagination-developers-mobile: 12;
+  --pagination-developers-desktop: 12;
+  
+  /* Default fallback for new sections */
+  --pagination-default-mobile: 6;
+  --pagination-default-desktop: 9;
+
   /* === SCROLLBAR CONFIGURATION === */
   --scrollbar-width: 30px;
   --scrollbar-track-bg: rgba(255, 255, 255, 0.05);

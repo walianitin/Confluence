@@ -98,13 +98,13 @@ export default function TeamSection() {
 
   const currentTeamMembers = teams[selectedClub];
 
-  // Pagination: 5 items on mobile, 9 on desktop
+  // Pagination: Reads config from CSS variables (--pagination-teams-mobile/desktop)
   const {
     currentItems: paginatedMembers,
     currentPage,
     totalPages,
     setCurrentPage,
-  } = usePagination(currentTeamMembers, { mobile: 5, desktop: 9 });
+  } = usePagination(currentTeamMembers, "teams");
 
   return (
     <div

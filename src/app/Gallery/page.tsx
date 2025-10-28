@@ -94,13 +94,14 @@ const data = [
 export default function Gallery() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Pagination: 1 item per page (carousel style)
+  // Pagination: Reads config from CSS variables (--pagination-gallery-mobile/desktop)
+  // Gallery uses carousel style (1 item per page)
   const {
     currentItems: paginatedImages,
     currentPage,
     totalPages,
     setCurrentPage,
-  } = usePagination(data, 1);
+  } = usePagination(data, "gallery");
 
   return (
     <div

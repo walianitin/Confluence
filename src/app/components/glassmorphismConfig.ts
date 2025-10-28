@@ -15,8 +15,8 @@ export const GLASS_BLUR = {
 
 // ===== BORDER SETTINGS =====
 export const GLASS_BORDER = {
-  standard: "border-white/12",     // Standard border (12% opacity)
-  top: "border-t border-white/12", // Top border only (for footer)
+  standard: "border-white/30",     // Standard border (12% opacity)
+  top: "border-t border-white/30", // Top border only (for footer)
 };
 
 // ===== BACKGROUND GRADIENTS =====
@@ -55,6 +55,9 @@ export const glassFooter = `${GLASS_BORDER.top} ${GLASS_GRADIENT.footer} ${GLASS
 export const cardSurfaceClasses = `border ${GLASS_BORDER.standard} ${GLASS_SHADOW.card} ${GLASS_BLUR.card}`;
 
 export const cardGlassBackground = GLASS_GRADIENT.card;
+
+// Button-specific glass settings
+export const glassPaginationButton = `border ${GLASS_BORDER.standard} ${GLASS_GRADIENT.element} ${GLASS_BLUR.button} shadow-lg transition-all hover:bg-[linear-gradient(140deg,_rgba(46,71,122,0.7)_0%,_rgba(32,51,92,0.62)_50%,_rgba(22,34,64,0.56)_100%)] hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[linear-gradient(140deg,_rgba(36,61,112,0.6)_0%,_rgba(22,41,82,0.52)_50%,_rgba(12,24,54,0.46)_100%)]`;
 
 /* ====================================
    USAGE INSTRUCTIONS

@@ -246,13 +246,13 @@ export default function EventsPage() {
       ? allEvents
       : allEvents.filter((event) => event.clubName === selectedClub);
 
-  // Pagination: 5 items on mobile, 9 on desktop
+  // Pagination: Reads config from CSS variables (--pagination-events-mobile/desktop)
   const {
     currentItems: paginatedEvents,
     currentPage,
     totalPages,
     setCurrentPage,
-  } = usePagination(filteredEvents, { mobile: 5, desktop: 9 });
+  } = usePagination(filteredEvents, "events");
 
   return (
     <main
