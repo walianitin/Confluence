@@ -36,16 +36,18 @@ const socialLinks = [
 const Footer: React.FC = () => {
   return (
     <footer className={`relative ${glassFooter}`}>
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-10 sm:px-10 lg:px-12">
-        <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-10 lg:px-12">
+        <div className="flex flex-col items-center justify-between gap-6 sm:gap-8 md:flex-row">
           <div className="text-center md:text-left">
-            <h3 className="text-2xl font-bold text-white">Confluence 2025</h3>
-            <p className="mt-2 text-sm text-slate-200/80">
+            <h3 className="text-xl font-bold text-white sm:text-2xl">
+              Confluence 2025
+            </h3>
+            <p className="mt-1.5 text-xs text-slate-200/80 sm:mt-2 sm:text-sm">
               NIT Kurukshetra, Thanesar, Haryana - 136119
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
@@ -53,7 +55,7 @@ const Footer: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.name}
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-100 transition-colors hover:text-sky-300 ${glassElement}`}
+                className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-100 transition-colors hover:text-sky-300 sm:h-10 sm:w-10 ${glassElement}`}
               >
                 {social.icon}
               </a>
@@ -61,8 +63,8 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/12 pt-6 text-center">
-          <p className="text-sm text-slate-300/90">
+        <div className="border-t border-white/12 pt-4 text-center sm:pt-6">
+          <p className="text-xs text-slate-300/90 sm:text-sm">
             © 2025 Confluence. All rights reserved.
           </p>
         </div>

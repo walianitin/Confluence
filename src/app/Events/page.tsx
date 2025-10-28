@@ -136,10 +136,11 @@ function EventCard({ event }: { event: Event }) {
 
   return (
     <motion.div
-      className={`relative flex cursor-pointer flex-col overflow-hidden ${cardSurfaceClasses} ${cardGlassBackground}`}
+      className={`relative flex cursor-pointer flex-col overflow-hidden ${cardSurfaceClasses} ${cardGlassBackground} w-full max-w-sm`}
       style={{
         aspectRatio: "3 / 4",
         borderRadius: `${CARD_OUTER_RADIUS_PX}px`,
+        minHeight: "320px",
       }}
       role="button"
       tabIndex={0}
@@ -192,11 +193,10 @@ function EventCard({ event }: { event: Event }) {
             transform: isExpanded ? "none" : "translateY(-50%)",
           }}
         >
-          <h3 className="text-lg font-semibold uppercase tracking-wide">
+          <h3 className="text-base font-semibold uppercase tracking-wide sm:text-lg">
             {event.eventName}
           </h3>
-        </div>
-
+        </div>{" "}
         {isExpanded && (
           <motion.div
             className="mt-4 flex flex-col items-center gap-4"
@@ -246,22 +246,22 @@ export default function EventsPage() {
       ? allEvents
       : allEvents.filter((event) => event.clubName === selectedClub);
 
-  // Pagination: 9 items per page
+  // Pagination: 5 items on mobile, 9 on desktop
   const {
     currentItems: paginatedEvents,
     currentPage,
     totalPages,
     setCurrentPage,
-  } = usePagination(filteredEvents, 9);
+  } = usePagination(filteredEvents, { mobile: 5, desktop: 9 });
 
   return (
     <main
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden py-24 text-white"
+      className="relative min-h-screen max-w-[100vw] overflow-hidden py-16 text-white sm:py-20 lg:py-24"
     >
       <div className={`${contentContainerClass}`}>
         <motion.h1
-          className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl"
+          className="mb-8 text-center text-3xl font-bold tracking-tight text-white sm:mb-12 sm:text-5xl lg:text-6xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -290,7 +290,7 @@ export default function EventsPage() {
           </motion.div>
         )}
  */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 justify-items-center sm:grid-cols-2 lg:grid-cols-3">
           {paginatedEvents.map((event) => (
             <EventCard key={event.eventName} event={event} />
           ))}

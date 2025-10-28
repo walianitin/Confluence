@@ -68,6 +68,17 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body) !important;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -98,20 +98,23 @@ export default function TeamSection() {
 
   const currentTeamMembers = teams[selectedClub];
 
-  // Pagination: 9 items per page
+  // Pagination: 5 items on mobile, 9 on desktop
   const {
     currentItems: paginatedMembers,
     currentPage,
     totalPages,
     setCurrentPage,
-  } = usePagination(currentTeamMembers, 9);
+  } = usePagination(currentTeamMembers, { mobile: 5, desktop: 9 });
 
   return (
-    <section ref={sectionRef} className="relative w-full py-12">
+    <section
+      ref={sectionRef}
+      className="relative w-full max-w-[100vw] overflow-x-hidden py-12 sm:py-16 lg:py-20"
+    >
       <div
-        className={`${contentContainerClass} flex flex-col items-center gap-10`}
+        className={`${contentContainerClass} flex flex-col items-center gap-8 sm:gap-10`}
       >
-        <h1 className="mb-12 text-center text-5xl font-bold tracking-tight text-white sm:text-6xl">
+        <h1 className="mb-8 text-center text-3xl font-bold tracking-tight text-white sm:mb-12 sm:text-5xl lg:text-6xl">
           TEAMS
         </h1>
 
@@ -123,7 +126,7 @@ export default function TeamSection() {
           className="w-full max-w-xs"
         />
 
-        <div className="flex w-full flex-wrap justify-center gap-8 md:justify-between xl:gap-12">
+        <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 sm:justify-items-center lg:grid-cols-3 xl:gap-8">
           {paginatedMembers.map(
             (
               member: { name: string; role: string; desc: string; img: string },

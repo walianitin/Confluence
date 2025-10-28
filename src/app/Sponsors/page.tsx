@@ -57,22 +57,23 @@ const sponsorSections: SponsorSection[] = [
 ];
 
 const pageStyles = {
-  main: "relative isolate overflow-hidden py-24 text-white",
-  container: `${contentContainerClass} flex flex-col gap-16`,
+  main: "relative isolate max-w-[100vw] overflow-hidden py-16 text-white sm:py-20 lg:py-24",
+  container: `${contentContainerClass} flex flex-col gap-12 sm:gap-16`,
   headerShell: "mx-auto max-w-3xl text-center",
-  headerBadge: "text-sm uppercase tracking-[0.35em] text-sky-300/80",
-  headerTitle: "mt-4 text-4xl font-semibold leading-tight sm:text-5xl",
-  headerCopy: "mt-4 text-base text-slate-300",
-  sections: "flex flex-col gap-14",
-  sectionCluster: "space-y-6",
+  headerBadge: "text-xs uppercase tracking-[0.35em] text-sky-300/80 sm:text-sm",
+  headerTitle:
+    "mt-3 text-3xl font-semibold leading-tight sm:mt-4 sm:text-4xl lg:text-5xl",
+  headerCopy: "mt-3 text-sm text-slate-300 sm:mt-4 sm:text-base",
+  sections: "flex flex-col gap-10 sm:gap-14",
+  sectionCluster: "space-y-4 sm:space-y-6",
   sectionHeadingWrap:
     "mx-auto flex w-full max-w-xl items-center justify-center gap-3",
   sectionHeadingText:
-    "text-center text-lg font-medium uppercase tracking-[0.3em] text-sky-200/90",
-  grid: "grid gap-6 sm:grid-cols-2 lg:grid-cols-3",
+    "text-center text-sm font-medium uppercase tracking-[0.25em] text-sky-200/90 sm:text-base lg:text-lg lg:tracking-[0.3em]",
+  grid: "grid gap-4 grid-cols-1 justify-items-center sm:grid-cols-2 sm:gap-6 lg:grid-cols-3",
   logoBox: "relative w-full pb-[100%]",
   logoImage: "object-cover",
-  sponsorName: "text-sm font-medium text-slate-100",
+  sponsorName: "text-xs font-medium text-slate-100 sm:text-sm",
 } as const;
 
 function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
@@ -80,7 +81,7 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
 
   return (
     <motion.article
-      className={`group relative flex w-full flex-col overflow-hidden text-center shadow-2xl transition duration-200 ease-out ${cardSurfaceClasses} ${cardGlassBackground} hover:border-sky-400/80`}
+      className={`group relative flex w-full max-w-sm flex-col overflow-hidden text-center shadow-2xl transition duration-200 ease-out ${cardSurfaceClasses} ${cardGlassBackground} hover:border-sky-400/80`}
       style={{
         borderRadius: `${outerRadius}px`,
       }}
@@ -132,8 +133,8 @@ export default function Page() {
   return (
     <main className={pageStyles.main}>
       <div className={pageStyles.container}>
-        <header className={`${pageStyles.headerShell} mb-12`}>
-          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+        <header className={`${pageStyles.headerShell} mb-8 sm:mb-12`}>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             SPONSORS
           </h1>
         </header>

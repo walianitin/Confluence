@@ -8,11 +8,11 @@ import PrismaticBurst from "../components/PrismaticBurst";
 const ANIMATION_CONFIG = {
   animationType: "rotate3d" as const,
   intensity: 4.5,
-  speed: 0.2,
-  distort: 2,
-  rayCount: 25,
+  speed: 0.4,
+  distort: 0,
+  rayCount: 30,
   mixBlendMode: "lighten" as const,
-  colors: ["#4000ffff", "#ffdd00ff", "#8B00FF"],
+  colors: ["#ff0000ff", "#ffdd00ff", "#8B00FF"],
   hoverDampness: 0.15,
   offset: { x: 0, y: 0 },
   paused: false,
@@ -29,6 +29,10 @@ const LAYOUT_CONFIG = {
   // Extends the PrismaticBurst animation beyond the page bounds
   // Use this to avoid abrupt cutoff when scrolling
   animationHeight: "160vh", // Can be larger than sectionHeight
+
+  // Width multiplier to keep burst visible on tall portrait breakpoints
+  // Clipped to viewport width to prevent horizontal scroll
+  animationWidth: "min(100vw, max(100vw, 140vh))",
 
   // Whether animation should be fixed or scroll with content
   // 'absolute' = scrolls naturally with page
@@ -73,10 +77,11 @@ export default function LandingPage() {
   const baseBackgroundStyle: CSSProperties = {
     position: LAYOUT_CONFIG.animationPosition,
     top: "50%",
-    left: 0,
-    right: 0,
+    left: "50%",
     height: LAYOUT_CONFIG.animationHeight,
-    transform: "translateY(-50%)",
+    width: LAYOUT_CONFIG.animationWidth,
+    transform: "translate(-50%, -50%)",
+    overflow: "hidden",
   };
 
   const handleVideoComplete = () => {
@@ -119,7 +124,7 @@ export default function LandingPage() {
 
   return (
     <div
-      className="relative w-full"
+      className="relative w-full max-w-[100vw] overflow-x-hidden"
       style={{ minHeight: LAYOUT_CONFIG.sectionHeight }}
     >
       {!introComplete && (
@@ -173,7 +178,7 @@ export default function LandingPage() {
       <AnimatePresence>
         {showHero && (
           <motion.section
-            className="relative z-10 flex min-h-screen w-full items-center justify-center"
+            className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

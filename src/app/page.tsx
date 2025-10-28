@@ -19,10 +19,11 @@ export default function Home() {
   });
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col text-white">
+    <div className="relative flex min-h-screen w-full max-w-[100vw] flex-col overflow-x-hidden text-white">
       {/* Fixed background wallpaper */}
       <FixedBackground
-        imageUrl="/bg-wallpaper.jpg"
+        imageUrl="/bg-wallpaper.svg"
+        mobileImageUrl="/bg-wallpaper-vertical.svg"
         alt="Confluence background"
       />
 

@@ -87,12 +87,12 @@ const GlassNavBar: React.FC = () => {
     <>
       <nav
         onMouseLeave={() => setHoveredLink(null)}
-        className={`fixed top-4 left-1/2 z-50 w-[min(92vw,720px)] -translate-x-1/2 flex items-center justify-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-sm whitespace-nowrap sm:gap-2 sm:px-4 sm:py-2 ${glassPanel}`}
+        className={`fixed top-2 left-1/2 z-50 w-[min(96vw,800px)] -translate-x-1/2 flex flex-col items-center gap-2 overflow-hidden rounded-2xl px-3 py-2 text-xs whitespace-nowrap sm:top-4 sm:flex-row sm:justify-between sm:gap-1.5 sm:rounded-full sm:px-3 sm:py-1.5 sm:text-sm md:gap-2 md:px-4 md:py-2 ${glassPanel}`}
         style={{ scrollbarGutter: "stable both-edges" }}
       >
         <Link
           href="/"
-          className="flex shrink-0 items-center justify-center px-2 sm:px-3"
+          className="flex shrink-0 items-center justify-center px-1 py-1 sm:px-2 sm:py-0 md:px-3"
           onClick={(event) => {
             if (isHome) {
               event.preventDefault();
@@ -110,13 +110,13 @@ const GlassNavBar: React.FC = () => {
             width={120}
             height={40}
             alt="Confluence Logo"
-            className="h-8 w-auto sm:h-10"
+            className="h-6 w-auto sm:h-8 md:h-10"
             priority
           />
         </Link>
         <div
           ref={tabsContainerRef}
-          className="tabs-scroll relative flex items-center gap-1.5 overflow-x-auto overflow-y-hidden"
+          className="tabs-scroll relative flex flex-1 w-full items-center justify-center gap-0.5 overflow-x-auto overflow-y-hidden sm:gap-1 md:gap-1.5"
           style={{
             minHeight: indicatorReady ? indicator.height : undefined,
             scrollbarWidth: "none",
@@ -191,7 +191,7 @@ const GlassNavBar: React.FC = () => {
                     setActiveSection(link.id);
                   }
                 }}
-                className={`relative flex items-center justify-center rounded-full px-3 py-1.5 transition-colors capitalize sm:px-4 sm:py-2 ${
+                className={`relative flex items-center justify-center rounded-full px-2.5 py-1.5 transition-colors capitalize text-[11px] sm:text-xs sm:px-3 sm:py-1.5 md:text-sm md:px-4 md:py-2 ${
                   isActive
                     ? "text-white font-semibold"
                     : "text-slate-100/90 hover:text-white"

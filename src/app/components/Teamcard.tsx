@@ -44,19 +44,19 @@ const teamMembers = [
 
 export default function TeamSection() {
   return (
-    <section className="relative py-20 text-gray-200">
+    <section className="relative max-w-[100vw] overflow-x-hidden py-16 text-gray-200 sm:py-20 lg:py-24">
       <div
-        className={`${contentContainerClass} flex flex-col items-center gap-12 text-center`}
+        className={`${contentContainerClass} flex flex-col items-center gap-10 text-center sm:gap-12`}
       >
-        <h1 className="mb-12 text-5xl font-bold tracking-tight sm:text-6xl">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight sm:mb-12 sm:text-5xl lg:text-6xl">
           DEVELOPERS
         </h1>
 
-        <div className="grid w-full gap-10 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid w-full gap-6 grid-cols-1 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-8">
           {teamMembers.map((member, i) => (
             <div
               key={i}
-              className={`${cardOuterRadiusClass} ${cardSurfaceClasses} ${cardGlassBackground} p-6 transition hover:border-sky-400/50 hover:bg-white/10`}
+              className={`w-full max-w-xs mx-auto ${cardOuterRadiusClass} ${cardSurfaceClasses} ${cardGlassBackground} p-4 transition hover:border-sky-400/50 hover:bg-white/10 sm:p-6`}
             >
               <div className="flex justify-center">
                 <Image
@@ -64,14 +64,16 @@ export default function TeamSection() {
                   width={130}
                   height={130}
                   alt={member.name}
-                  className="h-[140px] w-[140px] rounded-full object-cover ring-2 ring-gray-700"
+                  className="h-28 w-28 rounded-full object-cover ring-2 ring-gray-700 sm:h-[140px] sm:w-[140px]"
                 />
               </div>
 
-              <h3 className="mt-4 text-xl font-semibold">{member.name}</h3>
-              <p className="text-sm text-gray-400">{member.role}</p>
+              <h3 className="mt-3 text-lg font-semibold sm:mt-4 sm:text-xl">
+                {member.name}
+              </h3>
+              <p className="text-xs text-gray-400 sm:text-sm">{member.role}</p>
 
-              <div className="mt-4 flex justify-center gap-4 text-lg text-gray-400">
+              <div className="mt-3 flex justify-center gap-3 text-base text-gray-400 sm:mt-4 sm:gap-4 sm:text-lg">
                 <FaLinkedinIn className="cursor-pointer hover:text-white" />
                 <FaInstagram className="cursor-pointer hover:text-white" />
                 <FaFacebookF className="cursor-pointer hover:text-white" />

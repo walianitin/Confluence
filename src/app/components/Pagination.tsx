@@ -91,19 +91,83 @@ export default function Pagination({
 
       {/* Page Indicators (dots) */}
       <div className="flex items-center gap-2">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => handlePageClick(i + 1)}
-            className={`h-2.5 rounded-full transition-all ${
-              currentPage === i + 1
-                ? "w-8 bg-white"
-                : "w-2.5 bg-white/40 hover:bg-white/60"
-            }`}
-            aria-label={`Go to page ${i + 1}`}
-            aria-current={currentPage === i + 1 ? "page" : undefined}
-          />
-        ))}
+        {totalPages <= 7 ? (
+          // Show all dots if 7 or fewer pages
+          Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageClick(i + 1)}
+              className={`h-2.5 rounded-full transition-all ${
+                currentPage === i + 1
+                  ? "w-8 bg-white"
+                  : "w-2.5 bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label={`Go to page ${i + 1}`}
+              aria-current={currentPage === i + 1 ? "page" : undefined}
+            />
+          ))
+        ) : (
+          // Show condensed dots with ellipsis for many pages
+          <>
+            {/* First page */}
+            <button
+              onClick={() => handlePageClick(1)}
+              className={`h-2.5 rounded-full transition-all ${
+                currentPage === 1
+                  ? "w-8 bg-white"
+                  : "w-2.5 bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label="Go to page 1"
+              aria-current={currentPage === 1 ? "page" : undefined}
+            />
+
+            {/* Left ellipsis */}
+            {currentPage > 3 && (
+              <span className="text-white/60 text-xs">···</span>
+            )}
+
+            {/* Middle pages */}
+            {Array.from({ length: totalPages }, (_, i) => {
+              const page = i + 1;
+              const showPage =
+                page === currentPage ||
+                (page >= currentPage - 1 && page <= currentPage + 1);
+
+              if (!showPage || page === 1 || page === totalPages) return null;
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => handlePageClick(page)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    currentPage === page
+                      ? "w-8 bg-white"
+                      : "w-2.5 bg-white/40 hover:bg-white/60"
+                  }`}
+                  aria-label={`Go to page ${page}`}
+                  aria-current={currentPage === page ? "page" : undefined}
+                />
+              );
+            })}
+
+            {/* Right ellipsis */}
+            {currentPage < totalPages - 2 && (
+              <span className="text-white/60 text-xs">···</span>
+            )}
+
+            {/* Last page */}
+            <button
+              onClick={() => handlePageClick(totalPages)}
+              className={`h-2.5 rounded-full transition-all ${
+                currentPage === totalPages
+                  ? "w-8 bg-white"
+                  : "w-2.5 bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label={`Go to page ${totalPages}`}
+              aria-current={currentPage === totalPages ? "page" : undefined}
+            />
+          </>
+        )}
       </div>
 
       {/* Page Counter */}
@@ -125,18 +189,43 @@ export default function Pagination({
 }
 
 /**
- * Hook to manage pagination state
+ * Hook to manage pagination state with responsive items per page
  * @param items - Array of items to paginate
- * @param itemsPerPage - Number of items per page (default: 9)
+ * @param itemsPerPage - Number of items per page (default: 9) or object with mobile/desktop counts
  * @returns { currentItems, currentPage, totalPages, setCurrentPage }
  */
-export function usePagination<T>(items: T[], itemsPerPage: number = 9) {
+export function usePagination<T>(
+  items: T[],
+  itemsPerPage: number | { mobile: number; desktop: number } = 9
+) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const totalPages = Math.ceil(items.length / itemsPerPage);
+  // Detect mobile viewport
+  useEffect(() => {
+    if (typeof itemsPerPage === "object") {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768); // 768px is md breakpoint
+      };
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+      return () => window.removeEventListener("resize", checkMobile);
+    }
+  }, [itemsPerPage]);
+
+  // Determine items per page based on screen size
+  const currentItemsPerPage =
+    typeof itemsPerPage === "object"
+      ? isMobile
+        ? itemsPerPage.mobile
+        : itemsPerPage.desktop
+      : itemsPerPage;
+
+  const totalPages = Math.ceil(items.length / currentItemsPerPage);
+
+  const startIndex = (currentPage - 1) * currentItemsPerPage;
+  const endIndex = startIndex + currentItemsPerPage;
   const currentItems = items.slice(startIndex, endIndex);
 
   // Reset to page 1 if items change
@@ -147,6 +236,15 @@ export function usePagination<T>(items: T[], itemsPerPage: number = 9) {
       itemsRef.current = items.length;
     }
   }, [items.length]);
+
+  // Reset to page 1 if items per page changes (mobile/desktop switch)
+  const itemsPerPageRef = useRef(currentItemsPerPage);
+  useEffect(() => {
+    if (currentItemsPerPage !== itemsPerPageRef.current) {
+      setCurrentPage(1);
+      itemsPerPageRef.current = currentItemsPerPage;
+    }
+  }, [currentItemsPerPage]);
 
   return {
     currentItems,
