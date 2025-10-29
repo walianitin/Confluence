@@ -187,6 +187,10 @@ export default function LandingPage() {
   const [showStars, setShowStars] = useState(false);
   const [showBackground, setShowBackground] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
+  const [needsInteraction, setNeedsInteraction] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   // Detect mobile viewport
   useEffect(() => {
@@ -197,6 +201,52 @@ export default function LandingPage() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Handle video playback with mobile-specific fixes
+  useEffect(() => {
+    if (!videoRef) return;
+
+    const playVideo = async () => {
+      try {
+        // Reset video to start
+        videoRef.currentTime = 0;
+
+        // On desktop, try to autoplay with audio
+        if (!isMobile) {
+          videoRef.muted = false;
+          await videoRef.play();
+          console.log("Video playing with audio (desktop)");
+          setUserInteracted(true);
+        } else if (userInteracted) {
+          // On mobile, only play after user interaction
+          videoRef.muted = false;
+          await videoRef.play();
+          console.log("Video playing with audio (mobile after interaction)");
+        }
+      } catch (error) {
+        console.warn("Video playback with audio failed, trying muted:", error);
+        try {
+          // Fallback to muted playback
+          videoRef.muted = true;
+          await videoRef.play();
+          console.log("Video playing muted");
+          if (!isMobile) setUserInteracted(true);
+        } catch (mutedError) {
+          console.error("Video playback failed completely:", mutedError);
+          setVideoError(true);
+          handleVideoComplete();
+        }
+      }
+    };
+
+    playVideo();
+  }, [videoRef, userInteracted, isMobile]);
+
+  // Handle user interaction to start video
+  const handleStartVideo = () => {
+    setUserInteracted(true);
+    setNeedsInteraction(false);
+  };
 
   // Force scroll to top on mount and prevent scroll restoration
   useEffect(() => {
@@ -441,14 +491,61 @@ export default function LandingPage() {
       {!videoComplete && (
         <div className="fixed inset-0 z-50 bg-black">
           <video
+            ref={setVideoRef}
             className="h-full w-full object-cover"
             src="/Loading_Video.mp4"
-            autoPlay
-            muted
             playsInline
+            preload="auto"
+            webkit-playsinline="true"
+            x5-playsinline="true"
             onEnded={handleVideoComplete}
-            onError={handleVideoComplete}
-          />
+            onError={(e) => {
+              console.error("Video error event:", e);
+              setVideoError(true);
+              handleVideoComplete();
+            }}
+            onLoadedData={() => {
+              console.log("Video loaded successfully");
+            }}
+            onCanPlay={() => {
+              console.log("Video can play");
+              // Show interaction prompt for mobile
+              if (isMobile && !userInteracted) {
+                setNeedsInteraction(true);
+              }
+            }}
+          >
+            <source src="/Loading_Video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Tap to play overlay for mobile */}
+          {needsInteraction && !userInteracted && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm"
+              onClick={handleStartVideo}
+            >
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-white text-center px-6"
+              >
+                <div className="text-6xl mb-4">▶️</div>
+                <p className="text-lg font-medium">Tap to Start</p>
+                <p className="text-sm text-white/70 mt-2">
+                  Enable audio for the full experience
+                </p>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {videoError && (
+            <div className="absolute inset-0 flex items-center justify-center text-white text-sm">
+              Loading...
+            </div>
+          )}
         </div>
       )}
     </div>

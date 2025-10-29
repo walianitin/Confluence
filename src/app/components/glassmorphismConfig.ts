@@ -15,8 +15,8 @@ export const GLASS_BLUR = {
 
 // ===== BORDER SETTINGS =====
 export const GLASS_BORDER = {
-  standard: "border-white/30",     // Standard border (12% opacity)
-  top: "border-t border-white/30", // Top border only (for footer)
+  standard: "border-white/50",     // Standard border (12% opacity)
+  top: "border-t border-white/50", // Top border only (for footer)
 };
 
 // ===== BACKGROUND GRADIENTS =====

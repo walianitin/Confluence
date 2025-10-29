@@ -136,9 +136,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               <h2 className="mb-2 text-lg font-semibold text-white sm:text-xl">
                 Loading Experience
               </h2>
-              <p className="text-sm text-white/60">
-                Preparing assets for optimal performance
-              </p>
             </motion.div>
 
             {/* Progress bar container */}
