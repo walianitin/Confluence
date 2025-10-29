@@ -145,10 +145,10 @@ const INTRO_ANIMATION_CONFIG = {
   logoInitialWidth: "120vw",
 
   // Final logo width on MOBILE (after shrinking)
-  logoFinalWidthMobile: "90vw", // 80% of viewport width
+  logoFinalWidthMobile: "70vw", // 80% of viewport width
 
   // Final logo width on DESKTOP (after shrinking)
-  logoFinalWidthDesktop: "60vw", // 70% of viewport width
+  logoFinalWidthDesktop: "50vw", // 70% of viewport width
 
   // === ANIMATION EFFECTS ===
   // Animation easing curve for logo shrink
@@ -505,6 +505,21 @@ export default function LandingPage() {
         </AnimatePresence>
       </div>
 
+      {/* Hidden audio element that plays simultaneously with video and continues after */}
+      <audio
+        ref={audioRef}
+        src="/Full_Audio.m4a"
+        preload="auto"
+        onEnded={() => {
+          console.log("Audio completed (33s)");
+          setIntroComplete(true);
+        }}
+        onError={(e) => {
+          console.error("Audio loading failed:", e);
+          setIntroComplete(true);
+        }}
+      />
+
       {!videoComplete && (
         <div className="fixed inset-0 z-50 bg-black">
           <video
@@ -532,21 +547,6 @@ export default function LandingPage() {
             <source src="/Video_No_Audio.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-
-          {/* Hidden audio element that plays simultaneously with video */}
-          <audio
-            ref={audioRef}
-            src="/Full_Audio.m4a"
-            preload="auto"
-            onEnded={() => {
-              console.log("Audio completed (33s)");
-              setIntroComplete(true);
-            }}
-            onError={(e) => {
-              console.error("Audio loading failed:", e);
-              setIntroComplete(true);
-            }}
-          />
 
           {playbackBlocked && (
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black px-6 text-center sm:gap-8">
