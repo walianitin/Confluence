@@ -1,6 +1,6 @@
 "use client";
 
-import { type CSSProperties, useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Galaxy from "../components/Galaxy";
 
@@ -190,8 +190,8 @@ export default function LandingPage() {
   const [showBackground, setShowBackground] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
-  const [audioRef, setAudioRef] = useState<HTMLAudioElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [introComplete, setIntroComplete] = useState(false); // True when both video and audio complete
 
   // Detect mobile viewport
@@ -204,42 +204,22 @@ export default function LandingPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Setup audio element
-  useEffect(() => {
-    const audio = new Audio("/Full_Audio.m4a");
-    audio.preload = "auto";
-    audio.onended = () => {
-      console.log("Audio completed (33s)");
-      setIntroComplete(true);
-    };
-    audio.onerror = (e) => {
-      console.error("Audio loading failed:", e);
-      setIntroComplete(true);
-    };
-    setAudioRef(audio);
-
-    return () => {
-      audio.pause();
-      audio.src = "";
-    };
-  }, []);
-
   // Start playing both video and audio simultaneously
   useEffect(() => {
-    if (!videoRef || !audioRef) return;
+    if (!videoRef.current || !audioRef.current) return;
 
     const startPlayback = async () => {
       try {
         // Reset both to start
-        videoRef.currentTime = 0;
-        audioRef.currentTime = 0;
+        videoRef.current!.currentTime = 0;
+        audioRef.current!.currentTime = 0;
 
         // Play video (muted since audio is separate)
-        videoRef.muted = true;
-        const videoPlayPromise = videoRef.play();
+        videoRef.current!.muted = true;
+        const videoPlayPromise = videoRef.current!.play();
 
         // Play audio
-        const audioPlayPromise = audioRef.play();
+        const audioPlayPromise = audioRef.current!.play();
 
         await Promise.all([videoPlayPromise, audioPlayPromise]);
         console.log("Video and audio both playing");
@@ -251,7 +231,7 @@ export default function LandingPage() {
     };
 
     startPlayback();
-  }, [videoRef, audioRef]);
+  }, []);
 
   // When video ends (13 seconds), start showing animation while audio continues
   const handleVideoEnd = () => {
@@ -505,7 +485,7 @@ export default function LandingPage() {
       {!videoComplete && (
         <div className="fixed inset-0 z-50 bg-black">
           <video
-            ref={setVideoRef}
+            ref={videoRef}
             className="h-full w-full object-cover"
             src="/Video_No_Audio.mp4"
             muted
@@ -529,6 +509,21 @@ export default function LandingPage() {
             <source src="/Video_No_Audio.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+
+          {/* Hidden audio element that plays simultaneously with video */}
+          <audio
+            ref={audioRef}
+            src="/Full_Audio.m4a"
+            preload="auto"
+            onEnded={() => {
+              console.log("Audio completed (33s)");
+              setIntroComplete(true);
+            }}
+            onError={(e) => {
+              console.error("Audio loading failed:", e);
+              setIntroComplete(true);
+            }}
+          />
 
           {videoError && (
             <div className="absolute inset-0 flex items-center justify-center text-white text-sm">

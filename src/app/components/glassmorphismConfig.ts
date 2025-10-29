@@ -14,9 +14,13 @@ export const GLASS_BLUR = {
 };
 
 // ===== BORDER SETTINGS =====
+// Tweak thickness with border utilities (border, border-[1.5px], border-2, etc.)
+// Tweak opacity with Tailwind's color modifiers (!border-white/70, /85, etc.)
 export const GLASS_BORDER = {
-  standard: "border-white/50",     // Standard border (12% opacity)
-  top: "border-t border-white/50", // Top border only (for footer)
+  default: "border-[1.5px] !border-white/85",  // Balanced thickness/opacity used everywhere
+  subtle: "border !border-white/30",          // Slightly thinner + softer
+  bold: "border-2 !border-white",             // Thick + bright outline
+  footer: "border-t-[1.5px] !border-white/85",// Top-only border for footer strip
 };
 
 // ===== BACKGROUND GRADIENTS =====
@@ -45,19 +49,19 @@ export const GLASS_SHADOW = {
 // ===== COMPOSED GLASS STYLES =====
 // These combine the above settings into ready-to-use classes
 
-export const glassPanel = `border ${GLASS_BORDER.standard} ${GLASS_GRADIENT.panel} ${GLASS_BLUR.navbar} ${GLASS_SHADOW.panel}`;
+export const glassPanel = `${GLASS_BORDER.subtle} ${GLASS_GRADIENT.panel} ${GLASS_BLUR.navbar} ${GLASS_SHADOW.panel}`;
 
-export const glassElement = `border ${GLASS_BORDER.standard} ${GLASS_GRADIENT.element} ${GLASS_BLUR.button} ${GLASS_SHADOW.element}`;
+export const glassElement = `${GLASS_BORDER.subtle} ${GLASS_GRADIENT.element} ${GLASS_BLUR.button} ${GLASS_SHADOW.element}`;
 
-export const glassFooter = `${GLASS_BORDER.top} ${GLASS_GRADIENT.footer} ${GLASS_BLUR.footer} ${GLASS_SHADOW.footer}`;
+export const glassFooter = `${GLASS_BORDER.subtle} ${GLASS_GRADIENT.footer} ${GLASS_BLUR.footer} ${GLASS_SHADOW.footer}`;
 
 // Card-specific glass settings
-export const cardSurfaceClasses = `border ${GLASS_BORDER.standard} ${GLASS_SHADOW.card} ${GLASS_BLUR.card}`;
+export const cardSurfaceClasses = `${GLASS_BORDER.subtle} ${GLASS_SHADOW.card} ${GLASS_BLUR.card}`;
 
 export const cardGlassBackground = GLASS_GRADIENT.card;
 
 // Button-specific glass settings
-export const glassPaginationButton = `border ${GLASS_BORDER.standard} ${GLASS_GRADIENT.element} ${GLASS_BLUR.button} shadow-lg transition-all hover:bg-[linear-gradient(140deg,_rgba(46,71,122,0.7)_0%,_rgba(32,51,92,0.62)_50%,_rgba(22,34,64,0.56)_100%)] hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[linear-gradient(140deg,_rgba(36,61,112,0.6)_0%,_rgba(22,41,82,0.52)_50%,_rgba(12,24,54,0.46)_100%)]`;
+export const glassPaginationButton = `${GLASS_BORDER.subtle} ${GLASS_GRADIENT.element} ${GLASS_BLUR.button} shadow-lg transition-all hover:bg-[linear-gradient(140deg,_rgba(46,71,122,0.7)_0%,_rgba(32,51,92,0.62)_50%,_rgba(22,34,64,0.56)_100%)] hover:!border-white/20 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[linear-gradient(140deg,_rgba(36,61,112,0.6)_0%,_rgba(22,41,82,0.52)_50%,_rgba(12,24,54,0.46)_100%)]`;
 
 /* ====================================
    USAGE INSTRUCTIONS
@@ -73,7 +77,8 @@ To adjust opacity/colors:
 1. Modify GLASS_GRADIENT values
 
 To adjust borders:
-1. Modify GLASS_BORDER values
+1. Edit the class strings inside GLASS_BORDER (default, subtle, bold, footer)
+2. Swap the preset used by a component (e.g., use GLASS_BORDER.bold for cards)
 
 To adjust shadows:
 1. Modify GLASS_SHADOW values
