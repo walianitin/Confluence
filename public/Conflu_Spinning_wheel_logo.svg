@@ -2,6 +2,33 @@
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 486.96 256">
   <defs>
     <style>
+      /* ======================================
+         WHEEL ROTATION ANIMATION CONFIGURATION
+         Adjust these values to change rotation
+         ====================================== */
+      
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      
+      #wheel {
+        /* Center of rotation - adjust if wheel is not centered */
+        transform-origin: 67.34px 179.99px;
+        
+        /* Animation properties:
+           - Duration: Change '3s' to control speed (lower = faster, higher = slower)
+             Examples: 1s (fast), 2s (medium), 4s (slow), 6s (very slow)
+           - 'linear' = constant speed
+           - 'infinite' = loops forever
+        */
+        animation: rotate 3s linear infinite;
+      }
+
       .cls-1 {
         letter-spacing: -.03em;
       }

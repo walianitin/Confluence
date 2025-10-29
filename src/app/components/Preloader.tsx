@@ -23,8 +23,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       { url: "/bg-wallpaper.jpg", type: "image" },
       { url: "/bg-wallpaper-vertical.jpg", type: "image" },
 
-      // Logo
-      { url: "/conflu25White.png", type: "image" },
+      // Logos
+      { url: "/conflu25White.png", type: "image" }, // For navbar
+      { url: "/Conflu_Spinning_wheel_logo.svg", type: "image" }, // For landing page
 
       // Intro video (no audio)
       { url: "/Video_No_Audio.mp4", type: "video" },
@@ -143,7 +144,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/conflu25White.png"
+                src="/Conflu_Spinning_wheel_logo.svg"
                 alt="Confluence Logo"
                 className="h-16 w-auto sm:h-20 md:h-24"
               />

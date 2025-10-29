@@ -1,7 +1,6 @@
 "use client";
 
 import { type CSSProperties, useEffect, useState } from "react";
-import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Galaxy from "../components/Galaxy";
 
@@ -490,12 +489,12 @@ export default function LandingPage() {
                   ease: INTRO_ANIMATION_CONFIG.shrinkEasing,
                 }}
               >
-                <Image
-                  src="/conflu25White.png"
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/Conflu_Spinning_wheel_logo.svg"
                   alt="Confluence 2025"
-                  fill
-                  className="object-contain"
-                  priority
+                  className="w-full h-full object-contain"
+                  style={{ width: "100%", height: "100%" }}
                 />
               </motion.div>
             </motion.div>
