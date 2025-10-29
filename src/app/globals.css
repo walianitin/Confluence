@@ -15,6 +15,9 @@
    1. CSS VARIABLES CONFIGURATION
    ==================================== */
 :root {
+  /* Force light color scheme to prevent dark mode color adaptations */
+  color-scheme: dark;
+  
   /* === COLOR VARIABLES === */
   --background: #050316;
   --foreground: #f5f8ff;
@@ -205,6 +208,18 @@ body {
   padding: 0;
   width: 100%;
   overscroll-behavior: none;
+  /* Force white text colors even in dark mode */
+  -webkit-text-fill-color: var(--foreground);
+}
+
+/* Force all text elements to use white colors */
+*:not(svg) {
+  color: inherit;
+}
+
+/* Force border colors to remain white/light regardless of dark mode */
+* {
+  border-color: inherit;
 }
 
 /* ====================================

@@ -88,7 +88,8 @@ export default function Pagination({
       <button
         onClick={handlePrevious}
         disabled={currentPage === 1}
-        className={`rounded-lg px-4 sm:px-6 py-2.5 text-sm font-medium text-white whitespace-nowrap ${glassPaginationButton}`}
+        className={`rounded-lg px-4 sm:px-6 py-2.5 text-sm font-medium !text-white whitespace-nowrap ${glassPaginationButton}`}
+        style={{ color: "#ffffff" }}
         aria-label="Previous page"
       >
         Previous
@@ -106,9 +107,13 @@ export default function Pagination({
                 onClick={() => handlePageClick(i + 1)}
                 className={`h-2.5 rounded-full transition-all ${
                   currentPage === i + 1
-                    ? "w-8 bg-white"
-                    : "w-2.5 bg-white/40 hover:bg-white/60"
+                    ? "w-8 !bg-white"
+                    : "w-2.5 !bg-white/40 hover:!bg-white/60"
                 }`}
+                style={{
+                  backgroundColor:
+                    currentPage === i + 1 ? "#ffffff" : "rgba(255,255,255,0.4)",
+                }}
                 aria-label={`Go to page ${i + 1}`}
                 aria-current={currentPage === i + 1 ? "page" : undefined}
               />
@@ -121,16 +126,25 @@ export default function Pagination({
                 onClick={() => handlePageClick(1)}
                 className={`h-2.5 rounded-full transition-all ${
                   currentPage === 1
-                    ? "w-8 bg-white"
-                    : "w-2.5 bg-white/40 hover:bg-white/60"
+                    ? "w-8 !bg-white"
+                    : "w-2.5 !bg-white/40 hover:!bg-white/60"
                 }`}
+                style={{
+                  backgroundColor:
+                    currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.4)",
+                }}
                 aria-label="Go to page 1"
                 aria-current={currentPage === 1 ? "page" : undefined}
               />
 
               {/* Left ellipsis */}
               {currentPage > 3 && (
-                <span className="text-white/60 text-xs">···</span>
+                <span
+                  className="!text-white/60 text-xs"
+                  style={{ color: "rgba(255,255,255,0.6)" }}
+                >
+                  ···
+                </span>
               )}
 
               {/* Middle pages */}
@@ -148,9 +162,15 @@ export default function Pagination({
                     onClick={() => handlePageClick(page)}
                     className={`h-2.5 rounded-full transition-all ${
                       currentPage === page
-                        ? "w-8 bg-white"
-                        : "w-2.5 bg-white/40 hover:bg-white/60"
+                        ? "w-8 !bg-white"
+                        : "w-2.5 !bg-white/40 hover:!bg-white/60"
                     }`}
+                    style={{
+                      backgroundColor:
+                        currentPage === page
+                          ? "#ffffff"
+                          : "rgba(255,255,255,0.4)",
+                    }}
                     aria-label={`Go to page ${page}`}
                     aria-current={currentPage === page ? "page" : undefined}
                   />
@@ -159,7 +179,12 @@ export default function Pagination({
 
               {/* Right ellipsis */}
               {currentPage < totalPages - 2 && (
-                <span className="text-white/60 text-xs">···</span>
+                <span
+                  className="!text-white/60 text-xs"
+                  style={{ color: "rgba(255,255,255,0.6)" }}
+                >
+                  ···
+                </span>
               )}
 
               {/* Last page */}
@@ -167,9 +192,15 @@ export default function Pagination({
                 onClick={() => handlePageClick(totalPages)}
                 className={`h-2.5 rounded-full transition-all ${
                   currentPage === totalPages
-                    ? "w-8 bg-white"
-                    : "w-2.5 bg-white/40 hover:bg-white/60"
+                    ? "w-8 !bg-white"
+                    : "w-2.5 !bg-white/40 hover:!bg-white/60"
                 }`}
+                style={{
+                  backgroundColor:
+                    currentPage === totalPages
+                      ? "#ffffff"
+                      : "rgba(255,255,255,0.4)",
+                }}
                 aria-label={`Go to page ${totalPages}`}
                 aria-current={currentPage === totalPages ? "page" : undefined}
               />
@@ -178,7 +209,10 @@ export default function Pagination({
         </div>
 
         {/* Page Counter */}
-        <div className="text-sm font-medium text-white/90 whitespace-nowrap min-w-[3rem] text-center">
+        <div
+          className="text-sm font-medium !text-white/90 whitespace-nowrap min-w-[3rem] text-center"
+          style={{ color: "rgba(255,255,255,0.9)" }}
+        >
           {currentPage} / {totalPages}
         </div>
       </div>
@@ -187,7 +221,8 @@ export default function Pagination({
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className={`rounded-lg px-4 sm:px-6 py-2.5 text-sm font-medium text-white whitespace-nowrap ${glassPaginationButton}`}
+        className={`rounded-lg px-4 sm:px-6 py-2.5 text-sm font-medium !text-white whitespace-nowrap ${glassPaginationButton}`}
+        style={{ color: "#ffffff" }}
         aria-label="Next page"
       >
         Next

@@ -129,8 +129,11 @@ const INTRO_ANIMATION_CONFIG = {
   // Duration of logo shrinking animation (milliseconds)
   logoShrinkDuration: 2000,
 
-  // Fallback timeout if video doesn't play (milliseconds)
-  videoTimeout: 15000, // 15 seconds
+  // Duration video is visible before transitioning to audio-only (milliseconds)
+  videoVisibleDuration: 15000, // 15 seconds - after this, video fades out but audio continues
+
+  // Fallback timeout if video doesn't load/play (milliseconds)
+  videoTimeout: 20000, // 20 seconds
 
   // === LOGO SIZES ===
   // Initial logo width (full screen)
@@ -189,8 +192,8 @@ export default function LandingPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
-  const [needsInteraction, setNeedsInteraction] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
+  const [audioRef, setAudioRef] = useState<HTMLAudioElement | null>(null);
+  const [introComplete, setIntroComplete] = useState(false); // True when both video and audio complete
 
   // Detect mobile viewport
   useEffect(() => {
@@ -202,50 +205,85 @@ export default function LandingPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Handle video playback with mobile-specific fixes
+  // Setup audio element
   useEffect(() => {
-    if (!videoRef) return;
+    const audio = new Audio("/Full_Audio.m4a");
+    audio.preload = "auto";
+    audio.onended = () => {
+      console.log("Audio completed (33s)");
+      setIntroComplete(true);
+    };
+    audio.onerror = (e) => {
+      console.error("Audio loading failed:", e);
+      setIntroComplete(true);
+    };
+    setAudioRef(audio);
 
-    const playVideo = async () => {
+    return () => {
+      audio.pause();
+      audio.src = "";
+    };
+  }, []);
+
+  // Start playing both video and audio simultaneously
+  useEffect(() => {
+    if (!videoRef || !audioRef) return;
+
+    const startPlayback = async () => {
       try {
-        // Reset video to start
+        // Reset both to start
         videoRef.currentTime = 0;
+        audioRef.currentTime = 0;
 
-        // On desktop, try to autoplay with audio
-        if (!isMobile) {
-          videoRef.muted = false;
-          await videoRef.play();
-          console.log("Video playing with audio (desktop)");
-          setUserInteracted(true);
-        } else if (userInteracted) {
-          // On mobile, only play after user interaction
-          videoRef.muted = false;
-          await videoRef.play();
-          console.log("Video playing with audio (mobile after interaction)");
-        }
+        // Play video (muted since audio is separate)
+        videoRef.muted = true;
+        const videoPlayPromise = videoRef.play();
+
+        // Play audio
+        const audioPlayPromise = audioRef.play();
+
+        await Promise.all([videoPlayPromise, audioPlayPromise]);
+        console.log("Video and audio both playing");
       } catch (error) {
-        console.warn("Video playback with audio failed, trying muted:", error);
-        try {
-          // Fallback to muted playback
-          videoRef.muted = true;
-          await videoRef.play();
-          console.log("Video playing muted");
-          if (!isMobile) setUserInteracted(true);
-        } catch (mutedError) {
-          console.error("Video playback failed completely:", mutedError);
-          setVideoError(true);
-          handleVideoComplete();
-        }
+        console.error("Playback failed:", error);
+        setVideoError(true);
+        handleVideoEnd();
       }
     };
 
-    playVideo();
-  }, [videoRef, userInteracted, isMobile]);
+    startPlayback();
+  }, [videoRef, audioRef]);
 
-  // Handle user interaction to start video
-  const handleStartVideo = () => {
-    setUserInteracted(true);
-    setNeedsInteraction(false);
+  // When video ends (13 seconds), start showing animation while audio continues
+  const handleVideoEnd = () => {
+    console.log(
+      "Video ended (13s), starting animation, audio continues for 20 more seconds"
+    );
+    setVideoComplete(true);
+
+    // Start animation sequence immediately when video ends
+    handleVideoTransition();
+  };
+
+  // Handle transition from video to animation (called after video fades)
+  const handleVideoTransition = () => {
+    // Sequence 1: Show stars immediately when video fades
+    setShowStars(true);
+
+    // Sequence 2: Show background after delay
+    setTimeout(() => {
+      setShowBackground(true);
+    }, INTRO_ANIMATION_CONFIG.backgroundDelay);
+
+    // Sequence 3: Show logo at full size
+    setTimeout(() => {
+      setShowLogo(true);
+    }, INTRO_ANIMATION_CONFIG.backgroundDelay);
+
+    // Sequence 4: Start shrinking logo after hold duration
+    setTimeout(() => {
+      setLogoShrinking(true);
+    }, INTRO_ANIMATION_CONFIG.backgroundDelay + INTRO_ANIMATION_CONFIG.logoHoldDuration);
   };
 
   // Force scroll to top on mount and prevent scroll restoration
@@ -293,32 +331,9 @@ export default function LandingPage() {
   };
 
   const handleVideoComplete = () => {
+    console.log("Video playback timeout or error");
     setVideoComplete(true);
-
-    // Sequence 1: Show stars after configured delay
-    setTimeout(() => {
-      setShowStars(true);
-    }, INTRO_ANIMATION_CONFIG.starsDelay);
-
-    // Sequence 2: Show background after stars start + delay
-    setTimeout(() => {
-      setShowBackground(true);
-    }, INTRO_ANIMATION_CONFIG.starsDelay + INTRO_ANIMATION_CONFIG.backgroundDelay);
-
-    // Sequence 3: Show logo at full size (appears with or after background)
-    setTimeout(() => {
-      setShowLogo(true);
-    }, INTRO_ANIMATION_CONFIG.starsDelay + INTRO_ANIMATION_CONFIG.backgroundDelay);
-
-    // Sequence 4: Start shrinking logo after hold duration
-    setTimeout(
-      () => {
-        setLogoShrinking(true);
-      },
-      INTRO_ANIMATION_CONFIG.starsDelay +
-        INTRO_ANIMATION_CONFIG.backgroundDelay +
-        INTRO_ANIMATION_CONFIG.logoHoldDuration
-    );
+    handleVideoTransition();
   };
 
   // Lock scroll until logo finishes shrinking
@@ -493,12 +508,13 @@ export default function LandingPage() {
           <video
             ref={setVideoRef}
             className="h-full w-full object-cover"
-            src="/Loading_Video.mp4"
+            src="/Video_No_Audio.mp4"
+            muted
             playsInline
             preload="auto"
             webkit-playsinline="true"
             x5-playsinline="true"
-            onEnded={handleVideoComplete}
+            onEnded={handleVideoEnd}
             onError={(e) => {
               console.error("Video error event:", e);
               setVideoError(true);
@@ -509,37 +525,11 @@ export default function LandingPage() {
             }}
             onCanPlay={() => {
               console.log("Video can play");
-              // Show interaction prompt for mobile
-              if (isMobile && !userInteracted) {
-                setNeedsInteraction(true);
-              }
             }}
           >
-            <source src="/Loading_Video.mp4" type="video/mp4" />
+            <source src="/Video_No_Audio.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-
-          {/* Tap to play overlay for mobile */}
-          {needsInteraction && !userInteracted && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm"
-              onClick={handleStartVideo}
-            >
-              <motion.div
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-white text-center px-6"
-              >
-                <div className="text-6xl mb-4">▶️</div>
-                <p className="text-lg font-medium">Tap to Start</p>
-                <p className="text-sm text-white/70 mt-2">
-                  Enable audio for the full experience
-                </p>
-              </motion.div>
-            </motion.div>
-          )}
 
           {videoError && (
             <div className="absolute inset-0 flex items-center justify-center text-white text-sm">

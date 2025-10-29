@@ -269,7 +269,8 @@ const GlassNavBar: React.FC = () => {
                   y: mobileMenuOpen ? 6 : 0,
                 }}
                 transition={{ duration: 0.2 }}
-                className="w-5 h-0.5 bg-white rounded-full origin-center"
+                className="w-5 h-0.5 !bg-white rounded-full origin-center"
+                style={{ backgroundColor: "#ffffff" }}
               />
               <motion.span
                 animate={{
@@ -277,7 +278,8 @@ const GlassNavBar: React.FC = () => {
                   scale: mobileMenuOpen ? 0.8 : 1,
                 }}
                 transition={{ duration: 0.2 }}
-                className="w-5 h-0.5 bg-white rounded-full"
+                className="w-5 h-0.5 !bg-white rounded-full"
+                style={{ backgroundColor: "#ffffff" }}
               />
               <motion.span
                 animate={{
@@ -285,7 +287,8 @@ const GlassNavBar: React.FC = () => {
                   y: mobileMenuOpen ? -6 : 0,
                 }}
                 transition={{ duration: 0.2 }}
-                className="w-5 h-0.5 bg-white rounded-full origin-center"
+                className="w-5 h-0.5 !bg-white rounded-full origin-center"
+                style={{ backgroundColor: "#ffffff" }}
               />
             </div>
           </button>

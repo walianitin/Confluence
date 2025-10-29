@@ -26,8 +26,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       // Logo
       { url: "/conflu25White.png", type: "image" },
 
-      // Intro video
-      { url: "/Loading_Video.mp4", type: "video" },
+      // Intro video (no audio)
+      { url: "/Video_No_Audio.mp4", type: "video" },
+
+      // Full audio track
+      { url: "/Full_Audio.m4a", type: "audio" },
 
       // Optional: Add other critical assets
       // { url: "/cosmic-carnival.svg", type: "image" },
@@ -84,6 +87,24 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       });
     };
 
+    const loadAudio = (url: string): Promise<void> => {
+      return new Promise((resolve) => {
+        const audio = new Audio();
+        audio.onloadeddata = () => {
+          updateProgress();
+          resolve();
+        };
+        audio.onerror = () => {
+          console.warn(`Failed to load audio: ${url}`);
+          updateProgress(); // Still count as loaded to not block
+          resolve();
+        };
+        audio.preload = "auto";
+        audio.src = url;
+        audio.load();
+      });
+    };
+
     // Start loading all assets
     const loadAllAssets = async () => {
       const promises = assetsToLoad.map((asset) => {
@@ -91,6 +112,8 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           return loadImage(asset.url);
         } else if (asset.type === "video") {
           return loadVideo(asset.url);
+        } else if (asset.type === "audio") {
+          return loadAudio(asset.url);
         }
         return Promise.resolve();
       });
