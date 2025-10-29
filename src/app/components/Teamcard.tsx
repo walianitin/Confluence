@@ -1,7 +1,6 @@
 // components/TeamSection.tsx
 
 import Image from "next/image";
-import { FaInstagram, FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import {
   cardGlassBackground,
   cardOuterRadiusClass,
@@ -74,9 +73,53 @@ export default function TeamSection() {
               <p className="text-xs text-gray-400 sm:text-sm">{member.role}</p>
 
               <div className="mt-3 flex justify-center gap-3 text-base text-gray-400 sm:mt-4 sm:gap-4 sm:text-lg">
-                <FaLinkedinIn className="cursor-pointer hover:text-white" />
-                <FaInstagram className="cursor-pointer hover:text-white" />
-                <FaFacebookF className="cursor-pointer hover:text-white" />
+                <a
+                  href="#"
+                  aria-label="LinkedIn profile"
+                  className="inline-block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/Social Media Logos/Linkedin.png"
+                    alt="LinkedIn"
+                    width={28}
+                    height={28}
+                    className="object-contain dev-social-icon"
+                  />
+                </a>
+
+                <a
+                  href="#"
+                  aria-label="GitHub profile"
+                  className="inline-block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/Social Media Logos/GitHub.png"
+                    alt="GitHub"
+                    width={28}
+                    height={28}
+                    className="object-contain dev-social-icon"
+                  />
+                </a>
+
+                <a
+                  href="#"
+                  aria-label="Instagram profile"
+                  className="inline-block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src="/Social Media Logos/instagram.png"
+                    alt="Instagram"
+                    width={28}
+                    height={28}
+                    className="object-contain dev-social-icon"
+                  />
+                </a>
               </div>
             </div>
           ))}

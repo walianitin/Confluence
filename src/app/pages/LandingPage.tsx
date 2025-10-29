@@ -1,6 +1,12 @@
 "use client";
 
-import { type CSSProperties, useEffect, useState, useRef } from "react";
+import {
+  type CSSProperties,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Galaxy from "../components/Galaxy";
 
@@ -193,59 +199,9 @@ export default function LandingPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [introComplete, setIntroComplete] = useState(false); // True when both video and audio complete
+  const [playbackBlocked, setPlaybackBlocked] = useState(false);
 
-  // Detect mobile viewport
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Start playing both video and audio simultaneously
-  useEffect(() => {
-    if (!videoRef.current || !audioRef.current) return;
-
-    const startPlayback = async () => {
-      try {
-        // Reset both to start
-        videoRef.current!.currentTime = 0;
-        audioRef.current!.currentTime = 0;
-
-        // Play video (muted since audio is separate)
-        videoRef.current!.muted = true;
-        const videoPlayPromise = videoRef.current!.play();
-
-        // Play audio
-        const audioPlayPromise = audioRef.current!.play();
-
-        await Promise.all([videoPlayPromise, audioPlayPromise]);
-        console.log("Video and audio both playing");
-      } catch (error) {
-        console.error("Playback failed:", error);
-        setVideoError(true);
-        handleVideoEnd();
-      }
-    };
-
-    startPlayback();
-  }, []);
-
-  // When video ends (13 seconds), start showing animation while audio continues
-  const handleVideoEnd = () => {
-    console.log(
-      "Video ended (13s), starting animation, audio continues for 20 more seconds"
-    );
-    setVideoComplete(true);
-
-    // Start animation sequence immediately when video ends
-    handleVideoTransition();
-  };
-
-  // Handle transition from video to animation (called after video fades)
-  const handleVideoTransition = () => {
+  const handleVideoTransition = useCallback(() => {
     // Sequence 1: Show stars immediately when video fades
     setShowStars(true);
 
@@ -263,8 +219,81 @@ export default function LandingPage() {
     setTimeout(() => {
       setLogoShrinking(true);
     }, INTRO_ANIMATION_CONFIG.backgroundDelay + INTRO_ANIMATION_CONFIG.logoHoldDuration);
-  };
+  }, []);
 
+  const handleVideoEnd = useCallback(() => {
+    console.log(
+      "Video ended (13s), starting animation, audio continues for 20 more seconds"
+    );
+    setVideoComplete(true);
+
+    // Start animation sequence immediately when video ends
+    handleVideoTransition();
+  }, [handleVideoTransition]);
+
+  const handleVideoComplete = useCallback(() => {
+    console.log("Video playback timeout or error");
+    setVideoComplete(true);
+    handleVideoTransition();
+  }, [handleVideoTransition]);
+
+  const startPlayback = useCallback(
+    async (initiatedByUser = false) => {
+      if (!videoRef.current || !audioRef.current) return;
+
+      try {
+        setPlaybackBlocked(false);
+        setVideoError(false);
+
+        // Reset both to start
+        videoRef.current.currentTime = 0;
+        audioRef.current.currentTime = 0;
+
+        // Ensure video stays muted for autoplay compliance
+        videoRef.current.muted = true;
+
+        const videoPlayPromise = videoRef.current.play();
+        const audioPlayPromise = audioRef.current.play();
+
+        await Promise.all([videoPlayPromise, audioPlayPromise]);
+        console.log("Video and audio both playing");
+      } catch (error) {
+        console.error("Playback failed:", error);
+
+        if (
+          error instanceof DOMException &&
+          (error.name === "NotAllowedError" || error.name === "SecurityError")
+        ) {
+          setPlaybackBlocked(true);
+          if (!initiatedByUser) {
+            console.warn(
+              "Autoplay blocked by browser; waiting for user interaction."
+            );
+          }
+          return;
+        }
+
+        setVideoError(true);
+        handleVideoComplete();
+      }
+    },
+    [handleVideoComplete]
+  );
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Attempt autoplay on mount
+  useEffect(() => {
+    void startPlayback();
+  }, [startPlayback]);
   // Force scroll to top on mount and prevent scroll restoration
   useEffect(() => {
     // Disable browser scroll restoration
@@ -309,12 +338,6 @@ export default function LandingPage() {
     }),
   };
 
-  const handleVideoComplete = () => {
-    console.log("Video playback timeout or error");
-    setVideoComplete(true);
-    handleVideoTransition();
-  };
-
   // Lock scroll until logo finishes shrinking
   useEffect(() => {
     if (!videoComplete || !logoShrinking) {
@@ -348,7 +371,7 @@ export default function LandingPage() {
     }, INTRO_ANIMATION_CONFIG.videoTimeout);
 
     return () => clearTimeout(timeout);
-  }, [videoComplete]);
+  }, [videoComplete, handleVideoComplete]);
 
   return (
     <div
@@ -435,7 +458,6 @@ export default function LandingPage() {
             >
               <motion.div
                 className="relative"
-                style={{ aspectRatio: "3 / 1" }}
                 initial={{
                   width: INTRO_ANIMATION_CONFIG.logoInitialWidth,
                   scale: INTRO_ANIMATION_CONFIG.scaleAnimation.enabled
@@ -473,8 +495,7 @@ export default function LandingPage() {
                 <img
                   src="/Conflu_Spinning_wheel_logo.svg"
                   alt="Confluence 2025"
-                  className="w-full h-full object-contain"
-                  style={{ width: "100%", height: "100%" }}
+                  className="block w-full h-auto object-contain"
                 />
               </motion.div>
             </motion.div>
@@ -524,6 +545,27 @@ export default function LandingPage() {
               setIntroComplete(true);
             }}
           />
+
+          {playbackBlocked && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/85 px-6 text-center">
+              <h2 className="text-lg font-semibold text-white sm:text-xl">
+                Tap to start the Confluence experience
+              </h2>
+              <p className="max-w-md text-sm text-white/70 sm:text-base">
+                Browsers block autoplay with sound until you interact. Tap the
+                button below to begin the intro with audio.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  void startPlayback(true);
+                }}
+                className="rounded-full bg-white px-6 py-2 text-sm font-semibold text-black transition hover:bg-slate-200 sm:px-8 sm:py-3 sm:text-base"
+              >
+                Play Intro
+              </button>
+            </div>
+          )}
 
           {videoError && (
             <div className="absolute inset-0 flex items-center justify-center text-white text-sm">

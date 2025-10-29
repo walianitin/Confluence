@@ -79,7 +79,7 @@ export default function Pagination({
 
   return (
     <motion.div
-      className={`flex flex-wrap items-center justify-center gap-3 sm:gap-4 ${className}`}
+      className={`flex w-full flex-nowrap items-center justify-between gap-2 overflow-x-auto sm:justify-center sm:gap-4 ${className}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -88,7 +88,7 @@ export default function Pagination({
       <button
         onClick={handlePrevious}
         disabled={currentPage === 1}
-        className={`rounded-lg px-4 sm:px-6 py-2.5 text-sm font-medium !text-white whitespace-nowrap ${glassPaginationButton}`}
+        className={`shrink-0 rounded-lg px-3 sm:px-6 py-2.5 text-sm font-medium !text-white whitespace-nowrap ${glassPaginationButton}`}
         style={{ color: "#ffffff" }}
         aria-label="Previous page"
       >
@@ -96,9 +96,9 @@ export default function Pagination({
       </button>
 
       {/* Page Indicators (dots) and Counter - wrapped together */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         {/* Page Indicators (dots) */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {totalPages <= 7 ? (
             // Show all dots if 7 or fewer pages
             Array.from({ length: totalPages }, (_, i) => (
@@ -221,7 +221,7 @@ export default function Pagination({
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className={`rounded-lg px-4 sm:px-6 py-2.5 text-sm font-medium !text-white whitespace-nowrap ${glassPaginationButton}`}
+        className={`shrink-0 rounded-lg px-3 sm:px-6 py-2.5 text-sm font-medium !text-white whitespace-nowrap ${glassPaginationButton}`}
         style={{ color: "#ffffff" }}
         aria-label="Next page"
       >

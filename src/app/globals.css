@@ -353,3 +353,45 @@ section > .section-title {
     gap: var(--subsection-inner-gap);
   }
 }
+
+/* ====================================
+   7. DEVELOPER SOCIAL ICONS CONFIG
+   Variables and helper class to control size/opacity of
+   developer social media logos used in the Developers/Team card
+   ==================================== */
+:root {
+  /* Default icon size for developer social logos (can be overridden) */
+  --dev-icon-size: 24px;
+  --dev-icon-size-mobile: 22px;
+
+  /* Opacity and hover states */
+  --dev-icon-opacity: 0.8;
+  --dev-icon-hover-opacity: 1;
+
+  /* Transition timing for hover/focus interactions */
+  --dev-icon-transition: 150ms;
+}
+
+/* Shrink icons on small screens by updating the variable */
+@media (max-width: 767px) {
+  :root {
+    --dev-icon-size: var(--dev-icon-size-mobile);
+  }
+}
+
+/* Utility class applied to social logo images in the Developers card */
+.dev-social-icon {
+  width: var(--dev-icon-size) !important;
+  height: var(--dev-icon-size) !important;
+  opacity: var(--dev-icon-opacity);
+  transition: opacity var(--dev-icon-transition) ease, transform var(--dev-icon-transition) ease;
+  display: block;
+  object-fit: contain;
+}
+
+.dev-social-icon:focus,
+.dev-social-icon:hover {
+  opacity: var(--dev-icon-hover-opacity);
+  transform: translateY(-2px);
+}
+
