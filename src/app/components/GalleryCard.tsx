@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getCldImageUrl } from 'next-cloudinary';
 import {
   CARD_INNER_RADIUS_PX,
   CARD_OUTER_RADIUS_PX,
@@ -26,7 +27,17 @@ export default function Card(props: inputProps) {
   const tileInnerStyle = {
     borderRadius: `${innerRadiusPx}px`,
   } as const;
+  // Use NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME when available. If it's not set
+  // fall back to the provided image URL (if it's already a full URL) or a
+  // local placeholder so `next/image` does not throw the unconfigured-host
+  // error. next-cloudinary's getCldImageUrl expects a configured cloud name.
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
+  const url = cloudName
+    ? getCldImageUrl({ width: 960, height: 600, src: props.image })
+    : props.image && /^https?:\/\//i.test(props.image)
+    ? props.image
+    : "/sadf.jpg";
   return (
     <div className="flex w-full max-w-6xl flex-col gap-6 sm:gap-8">
       <div className="grid gap-4 sm:gap-6 md:grid-cols-[minmax(180px,1fr)_minmax(300px,1.6fr)_minmax(180px,1fr)]">
@@ -106,7 +117,7 @@ export default function Card(props: inputProps) {
             </div>
           </article>
 
-          <article
+          {/* <article
             className={`${cardSurfaceClasses} ${cardGlassBackground} flex-1 p-2`}
             style={tileOuterStyle}
           >
@@ -126,7 +137,7 @@ export default function Card(props: inputProps) {
                 {/* {props.vector} */}
               </div>
             </div>
-          </article>
+          </article> */}
         </div>
       </div>
     </div>

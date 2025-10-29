@@ -23,7 +23,7 @@ const sponsorSections: SponsorSection[] = [
   {
     heading: "Title Sponsors",
     sponsors: [
-      { name: "Stellar Motors", logo: "/sadf.jpg" },
+      { name: "Stellar Motors", logo: "/Photog_Poster1.jpg" },
       { name: "Nova FinCorp", logo: "/sadf.jpg" },
     ],
   },

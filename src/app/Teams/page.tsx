@@ -333,14 +333,13 @@ export default function TeamSection() {
         <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 sm:justify-items-center lg:grid-cols-3 xl:gap-8">
           {paginatedMembers.map(
             (
-              member: { name: string; role: string; desc: string; img: string },
+              member: { name: string; role: string; img: string },
               index: Key | null | undefined
             ) => (
               <SecyCard
                 key={index}
                 name={member.name}
                 role={member.role}
-                desc={member.desc}
                 img={member.img}
               />
             )
