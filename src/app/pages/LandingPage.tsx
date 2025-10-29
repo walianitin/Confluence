@@ -457,7 +457,8 @@ export default function LandingPage() {
               transition={{ duration: 0.3, ease: "easeOut" }}
             >
               <motion.div
-                className="relative"
+                className="relative flex items-center justify-center"
+                style={{ maxWidth: "100%" }}
                 initial={{
                   width: INTRO_ANIMATION_CONFIG.logoInitialWidth,
                   scale: INTRO_ANIMATION_CONFIG.scaleAnimation.enabled
@@ -495,7 +496,8 @@ export default function LandingPage() {
                 <img
                   src="/Conflu_Spinning_wheel_logo.svg"
                   alt="Confluence 2025"
-                  className="block w-full h-auto object-contain"
+                  className="max-w-full h-auto object-contain"
+                  style={{ display: "block" }}
                 />
               </motion.div>
             </motion.div>
@@ -547,20 +549,22 @@ export default function LandingPage() {
           />
 
           {playbackBlocked && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black/85 px-6 text-center">
-              <h2 className="text-lg font-semibold text-white sm:text-xl">
-                Tap to start the Confluence experience
-              </h2>
-              <p className="max-w-md text-sm text-white/70 sm:text-base">
-                Browsers block autoplay with sound until you interact. Tap the
-                button below to begin the intro with audio.
-              </p>
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-black px-6 text-center sm:gap-8">
+              <div className="flex flex-col gap-4 sm:gap-5">
+                <h2 className="text-xl font-semibold text-white sm:text-2xl md:text-3xl">
+                  Tap to start the Confluence experience
+                </h2>
+                <p className="mx-auto max-w-lg text-sm leading-relaxed text-white/80 sm:text-base md:max-w-xl md:text-lg">
+                  Browsers block autoplay with sound until you interact. Tap the
+                  button below to begin the intro with audio.
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => {
                   void startPlayback(true);
                 }}
-                className="rounded-full bg-white px-6 py-2 text-sm font-semibold text-black transition hover:bg-slate-200 sm:px-8 sm:py-3 sm:text-base"
+                className="rounded-full bg-white px-8 py-3 text-base font-semibold text-black shadow-lg transition-all hover:scale-105 hover:bg-gray-100 active:scale-95 sm:px-10 sm:py-4 sm:text-lg"
               >
                 Play Intro
               </button>
