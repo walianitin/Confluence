@@ -35,8 +35,13 @@ export function useScrollSectionDetection({
         return;
       }
 
+      // Calculate navbar offset (mobile: 80px, desktop: 96px)
+      const isMobile = window.innerWidth < 640;
+      const navbarOffset = isMobile ? 80 : 96;
+
       // Use scroll position to determine which section should be active
-      const scrollPosition = scrollY + window.innerHeight / 3; // Check at 1/3 from top
+      // Check at navbar height + some extra space from top
+      const scrollPosition = scrollY + navbarOffset + 50;
       let activeId: string = sectionIds[0] || "home";
 
       // Find the section that contains the scroll position

@@ -34,8 +34,8 @@ const sponsors: Sponsor[] = [
 ];
 
 const pageStyles = {
-  main: "relative isolate overflow-hidden py-24 text-white",
-  container: `${contentContainerClass} flex flex-col gap-16`,
+  main: "relative isolate max-w-[100vw] overflow-hidden text-white",
+  container: `${contentContainerClass} section-content flex flex-col`,
   headerShell: "mx-auto max-w-3xl text-center",
   logoBox: "relative w-full pb-[100%]",
   logoImage: "object-cover",
@@ -123,8 +123,8 @@ export default function Page() {
       <div className={pageStyles.aurora} />
 
       <div className={pageStyles.container}>
-        <header className={`${pageStyles.headerShell} mb-12`}>
-          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+        <header className={`${pageStyles.headerShell}`}>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             SPONSORS
           </h1>
         </header>

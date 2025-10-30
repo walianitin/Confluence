@@ -1,25 +1,109 @@
 @import "tailwindcss";
 
+/* ====================================
+   TABLE OF CONTENTS
+   ==================================== */
+/* 1. CSS VARIABLES CONFIGURATION
+   2. FONT FACE DECLARATIONS
+   3. FONT APPLICATION RULES
+   4. GLOBAL RESETS & BASE STYLES
+   5. SCROLLBAR STYLING
+   6. SECTION SPACING UTILITIES
+*/
+
+/* ====================================
+   1. CSS VARIABLES CONFIGURATION
+   ==================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Force light color scheme to prevent dark mode color adaptations */
+  color-scheme: dark;
+  
+  /* === COLOR VARIABLES === */
+  --background: #050316;
+  --foreground: #f5f8ff;
+  
+  /* === FONT CONFIGURATION === */
+  /* Available Fonts: Gothvetica, InterTight, GoodTimes, Roboto-Regular, 
+     AnekLatin-Regular, Inter-Regular, Dune-Rise, Walkway SemiBold, 
+     Walkway UltraBold, LTWave-Medium, PetrovSans-SemiBold */
+  
+  --font-navbar: 'Walkway UltraBold';
+  --font-heading: 'Walkway UltraBold';
+  --font-card: 'Gothvetica';      /* Event cards, Developer cards, Team cards */
+  --font-body: 'Walkway UltraBold';
+  --font-button: 'Walkway UltraBold';
+
+  /* === LETTER SPACING (Character Spacing) === */
+  /* Values: normal, or use px/em (e.g., 0.5px, 0.05em, 2px) */
+  --letter-spacing-navbar: 0.10em;
+  --letter-spacing-heading: 0.10em;
+  --letter-spacing-card: 0.05em;
+  --letter-spacing-body: 0.10em;
+  --letter-spacing-button: 0.10em;
+
+  /* === SECTION SPACING === */
+  --section-heading-to-content: 1rem;           /* Desktop */
+  --section-heading-to-content-mobile: 1.5rem;  /* Mobile */
+  --section-gap: 1rem;                          /* Desktop */
+  --section-gap-mobile: 2.5rem;                 /* Mobile */
+  --section-padding-y: 2rem;                    /* Desktop */
+  --section-padding-y-mobile: 2rem;             /* Mobile */
+
+  /* Subsection spacing (e.g., Sponsors categories) */
+  --subsection-gap: 0rem;                       /* Desktop */
+  --subsection-gap-mobile: 2rem;                /* Mobile */
+  --subsection-inner-gap: 2rem;                 /* Desktop */
+  --subsection-inner-gap-mobile: 1rem;          /* Mobile */
+
+  /* === PAGINATION CONFIGURATION === */
+  /* Controls when pagination appears and how many items per page */
+  
+  /* Minimum items needed before pagination appears */
+  --pagination-threshold: 3;  /* Show pagination only if items > this value */
+  
+  /* Items per page for different sections */
+  /* Events Section */
+  --pagination-events-mobile: 3;
+  --pagination-events-desktop: 9;
+  
+  /* Teams Section */
+  --pagination-teams-mobile: 4;
+  --pagination-teams-desktop: 9;
+  
+  /* Gallery Section (carousel style - 1 item per page) */
+  --pagination-gallery-mobile: 1;
+  --pagination-gallery-desktop: 1;
+  
+  /* Developers Section (if pagination is added later) */
+  --pagination-developers-mobile: 12;
+  --pagination-developers-desktop: 12;
+  
+  /* Default fallback for new sections */
+  --pagination-default-mobile: 6;
+  --pagination-default-desktop: 9;
+
+  /* === SCROLLBAR CONFIGURATION === */
+  --scrollbar-width: 30px;
+  --scrollbar-track-bg: rgba(255, 255, 255, 0.05);
+  --scrollbar-track-border: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-bg: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.3);
+  --scrollbar-thumb-border: rgba(255, 255, 255, 0.3);
+  --scrollbar-blur: 10px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  
-  /* Local fonts for Tailwind */
-  --font-family-navbar: 'Gothvetica', ui-sans-serif, system-ui, sans-serif;
-  --font-family-heading: 'Roboto-Regular', ui-sans-serif, system-ui, sans-serif;
-  --font-family-body: 'AnekLatin-Regular', ui-sans-serif, system-ui, sans-serif;
-  
-  /* Override Tailwind's default sans font */
-  --font-sans: var(--font-family-body);
-  --font-mono: var(--font-geist-mono);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #050316;
+    --foreground: #f5f8ff;
+  }
 }
 
-/* Your local fonts — auto-loaded from /fonts/ folder */
+
+/* ====================================
+   2. FONT FACE DECLARATIONS
+   All fonts loaded from /public/fonts/
+   ==================================== */
 @font-face {
   font-family: 'Gothvetica';
   src: url('/fonts/Gothvetica.ttf') format('truetype');
@@ -27,14 +111,20 @@
 }
 
 @font-face {
-  font-family: 'InterTight';
-  src: url('/fonts/InterTight-Regular.ttf') format('truetype');
+  font-family: 'Walkway SemiBold';
+  src: url('/fonts/Walkway SemiBold.ttf') format('truetype');
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'GoodTimes';
-  src: url('/fonts/GoodTimes.ttf') format('truetype');
+  font-family: 'Walkway UltraBold';
+  src: url('/fonts/Walkway UltraBold.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PetrovSans-SemiBold';
+  src: url('/fonts/PetrovSans-SemiBold.ttf') format('truetype');
   font-display: swap;
 }
 
@@ -44,37 +134,264 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Inter-Regular';
-  src: url('/fonts/Inter-Regular.ttf') format('truetype');
-  font-display: swap;
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  /* Local fonts for Tailwind */
+  --font-family-navbar: var(--font-navbar), ui-sans-serif, system-ui, sans-serif;
+  --font-family-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  --font-family-card: var(--font-card), ui-sans-serif, system-ui, sans-serif;
+  --font-family-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-family-button: var(--font-button), ui-sans-serif, system-ui, sans-serif;
+  
+  /* Override Tailwind's default sans font */
+  --font-sans: var(--font-family-body);
+  --font-mono: var(--font-geist-mono);
 }
 
-/* Control fonts for different elements here */
-:root {
-  --font-navbar: var(--font-family-navbar);
-  --font-heading: var(--font-family-heading);
-  --font-body: var(--font-family-body);
+/* ====================================
+   3. FONT APPLICATION RULES
+   ==================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading) !important;
+  letter-spacing: var(--letter-spacing-heading) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Card titles - separate from section headings */
+.card-title, 
+[class*="card"] h3, 
+[class*="card"] h4 {
+  font-family: var(--font-card) !important;
+  letter-spacing: var(--letter-spacing-card) !important;
+}
+
+nav, 
+[role="navigation"] {
+  font-family: var(--font-navbar) !important;
+  letter-spacing: var(--letter-spacing-navbar) !important;
+}
+
+button, 
+.btn {
+  font-family: var(--font-button) !important;
+  letter-spacing: var(--letter-spacing-button) !important;
+}
+
+body {
+  font-family: var(--font-body) !important;
+  letter-spacing: var(--letter-spacing-body) !important;
+}
+
+/* ====================================
+   4. GLOBAL RESETS & BASE STYLES
+   ==================================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  overscroll-behavior: none;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body) !important;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overscroll-behavior: none;
+  /* Force white text colors even in dark mode */
+  -webkit-text-fill-color: var(--foreground);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading) !important;
+/* Force all text elements to use white colors */
+*:not(svg) {
+  color: inherit;
 }
 
-nav, [role="navigation"] {
-  font-family: var(--font-navbar) !important;
+/* Force border colors to remain white/light regardless of dark mode */
+* {
+  border-color: inherit;
+}
+
+/* ====================================
+   5. SCROLLBAR STYLING
+   Glassmorphism custom scrollbar
+   ==================================== */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+  border: 1px solid var(--scrollbar-track-border);
+  border-radius: 10px;
+  backdrop-filter: blur(var(--scrollbar-blur));
+  -webkit-backdrop-filter: blur(var(--scrollbar-blur));
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-bg);
+  border: 1px solid var(--scrollbar-thumb-border);
+  border-radius: 10px;
+  backdrop-filter: blur(var(--scrollbar-blur));
+  -webkit-backdrop-filter: blur(var(--scrollbar-blur));
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-bg);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
+}
+
+/* ====================================
+   6. SECTION SPACING UTILITIES
+   ==================================== */
+
+/* Manual utility classes */
+.section-spacing {
+  padding-top: var(--section-padding-y-mobile);
+  padding-bottom: var(--section-padding-y-mobile);
+  margin-bottom: var(--section-gap-mobile);
+}
+
+@media (min-width: 1024px) {
+  .section-spacing {
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+    margin-bottom: var(--section-gap);
+  }
+}
+
+.section-heading {
+  margin-bottom: var(--section-heading-to-content-mobile);
+}
+
+@media (min-width: 1024px) {
+  .section-heading {
+    margin-bottom: var(--section-heading-to-content);
+  }
+}
+
+/* Auto-apply to <section> elements */
+section {
+  margin: 0;
+  padding: 0;
+  padding-top: var(--section-padding-y-mobile);
+  padding-bottom: var(--section-padding-y-mobile);
+  margin-bottom: var(--section-gap-mobile);
+}
+
+@media (min-width: 1024px) {
+  section {
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+    margin-bottom: var(--section-gap);
+  }
+}
+
+section > h1,
+section > h2,
+section > .section-title {
+  margin-bottom: var(--section-heading-to-content-mobile);
+}
+
+@media (min-width: 1024px) {
+  section > h1,
+  section > h2,
+  section > .section-title {
+    margin-bottom: var(--section-heading-to-content);
+  }
+}
+
+/* Section content spacing */
+.section-content > * + * {
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .section-content > * + * {
+    margin-top: 2.5rem;
+  }
+}
+
+/* Subsection spacing for grouped content */
+.sponsor-subsections > * + * {
+  margin-top: var(--subsection-gap-mobile);
+}
+
+@media (min-width: 640px) {
+  .sponsor-subsections > * + * {
+    margin-top: var(--subsection-gap);
+  }
+}
+
+.sponsor-subsection-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--subsection-inner-gap-mobile);
+}
+
+@media (min-width: 640px) {
+  .sponsor-subsection-inner {
+    gap: var(--subsection-inner-gap);
+  }
+}
+
+/* ====================================
+   7. DEVELOPER SOCIAL ICONS CONFIG
+   Variables and helper class to control size/opacity of
+   developer social media logos used in the Developers/Team card
+   ==================================== */
+:root {
+  /* Default icon size for developer social logos (can be overridden) */
+  --dev-icon-size: 24px;
+  --dev-icon-size-mobile: 22px;
+
+  /* Opacity and hover states */
+  --dev-icon-opacity: 0.8;
+  --dev-icon-hover-opacity: 1;
+
+  /* Transition timing for hover/focus interactions */
+  --dev-icon-transition: 150ms;
+}
+
+/* Shrink icons on small screens by updating the variable */
+@media (max-width: 767px) {
+  :root {
+    --dev-icon-size: var(--dev-icon-size-mobile);
+  }
+}
+
+/* Utility class applied to social logo images in the Developers card */
+.dev-social-icon {
+  width: var(--dev-icon-size) !important;
+  height: var(--dev-icon-size) !important;
+  opacity: var(--dev-icon-opacity);
+  transition: opacity var(--dev-icon-transition) ease, transform var(--dev-icon-transition) ease;
+  display: block;
+  object-fit: contain;
+}
+
+.dev-social-icon:focus,
+.dev-social-icon:hover {
+  opacity: var(--dev-icon-hover-opacity);
+  transform: translateY(-2px);
 }
 
