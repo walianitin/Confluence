@@ -18,7 +18,7 @@ interface ScrollableSectionsProps {
 export default function ScrollableSections({
   sections,
   sectionRefs,
-  scrollMarginTop = "120px",
+  scrollMarginTop = "10px",
 }: ScrollableSectionsProps) {
   return (
     <>

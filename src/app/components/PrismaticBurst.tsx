@@ -74,10 +74,9 @@ vec3 rayDir(vec2 frag, vec2 res, vec2 offset, float dist){
 
 float edgeFade(vec2 frag, vec2 res, vec2 offset){
     vec2 toC = frag - 0.5 * res - offset;
-    // HEIGHT CONTROL: Change 0.5 to smaller value (0.35, 0.3, etc.) to extend rays further
-    // Original: 0.5 * min(res.x, res.y) - rays fade at viewport edge
-    // Smaller divisor = rays extend beyond viewport before fading
-    float r = length(toC) / (0.35 * min(res.x, res.y));
+    // Use max instead of min for consistent appearance across orientations
+    // This ensures rays extend consistently regardless of viewport aspect ratio
+    float r = length(toC) / (0.35 * max(res.x, res.y));
     float x = clamp(r, 0.0, 1.0);
     float q = x * x * x * (x * (x * 6.0 - 15.0) + 10.0);
     float s = q * 0.5;
@@ -253,7 +252,9 @@ const PrismaticBurst = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Use consistent DPR across devices for uniform rendering
+    // Set to 1 for best consistency, or allow higher values if needed
+    const dpr = 1; // Changed from Math.min(window.devicePixelRatio || 1, 2)
     const renderer = new Renderer({
       alpha: false,
     });

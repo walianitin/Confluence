@@ -6,27 +6,24 @@ declare module 'ogl' {
     render(params: { scene: Mesh }): void;
   }
 
+  export type UniformValue = number | boolean | string | Float32Array | WebGLTexture | ArrayBuffer | object | null;
+
   export class Program {
     constructor(
       gl: WebGLRenderingContext,
       options: {
         vertex: string;
         fragment: string;
-        // Use `unknown` instead of `any` to avoid the `no-explicit-any` lint rule.
-        // Callers can narrow the type as needed (number, array, texture, etc.).
-        uniforms?: Record<string, { value: unknown }>;
+        uniforms?: Record<string, { value: UniformValue }>;
       }
     );
-  // Use `unknown` here as well to avoid `any` in the declaration.
-  uniforms: Record<string, { value: unknown }>;
+    uniforms: Record<string, { value: UniformValue }>;
   }
 
   export class Mesh {
     constructor(
       gl: WebGLRenderingContext,
-      // geometry shape varies between implementations; use `unknown` and
-      // let consumers narrow the type where needed.
-      options: { geometry: unknown; program: Program }
+      options: { geometry: Triangle; program: Program }
     );
   }
 
