@@ -10,9 +10,16 @@ import {
   cardSurfaceClasses,
 } from "../components/cardTokens";
 import { contentContainerClass } from "../components/layoutTokens";
-import OptimizedImage from "../components/OptimizedImage";
-import Pagination, { usePagination } from "../components/Pagination";
-
+import {  type CSSProperties } from "react";
+const backgroundStyle: CSSProperties = {
+  backgroundImage: 'url("/Event3_bg.jpg")',
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  width: "100%",
+  minHeight: "100vh",
+  opacity: 0.7,
+};
 type Event = {
   eventName: string;
   image: string;
